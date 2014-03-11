@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>edu.umn.pubsub</groupId>
-    <artifactId>PubSub</artifactId>
+    <groupId>edu.umn.bulletinboard</groupId>
+    <artifactId>BulletinBoard</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>edu.umn.pubsub.client</groupId>
+  <groupId>edu.umn.bulletinboard.client</groupId>
   <artifactId>client</artifactId>
   <!--version>1.0-SNAPSHOT</version-->
   <!--packaging>jar</packaging-->
@@ -28,7 +28,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>edu.umn.pubsub.common</groupId>
+      <groupId>edu.umn.bulletinboard.common</groupId>
       <artifactId>common</artifactId>
       <version>${project.version}</version>
     </dependency>

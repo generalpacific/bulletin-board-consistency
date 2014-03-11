@@ -2,11 +2,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.umn.pubsub</groupId>
-  <artifactId>PubSub</artifactId>
+  <groupId>edu.umn.bulletinboard</groupId>
+  <artifactId>BulletinBoard</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>PubSub</name>
+  <name>BulletinBoard</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -32,25 +32,25 @@
 <dependencyManagement>
   <dependencies>
     <!--dependency>
-      <groupId>edu.umn.pubsub.common</groupId>
+      <groupId>edu.umn.bulletinboard.common</groupId>
       <artifactId>common</artifactId>
       <version>${project.version}</version>
     </dependency-->
 
     <dependency>
-      <groupId>edu.umn.pubsub.server</groupId>
+      <groupId>edu.umn.bulletinboard.server</groupId>
       <artifactId>server</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>edu.umn.pubsub.client</groupId>
+      <groupId>edu.umn.bulletinboard.client</groupId>
       <artifactId>client</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>edu.umn.pubsub</groupId>
+      <groupId>edu.umn.bulletinboard</groupId>
       <artifactId>dist</artifactId>
       <version>${project.version}</version>
     </dependency>

@@ -3,12 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>edu.umn.pubsub</groupId>
-    <artifactId>PubSub</artifactId>
+    <groupId>edu.umn.bulletinboard</groupId>
+    <artifactId>BulletinBoard</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   
-  <groupId>edu.umn.pubsub</groupId>
+  <groupId>edu.umn.bulletinboard</groupId>
   <artifactId>dist</artifactId>
   <!--version>1.0-SNAPSHOT</version-->
   <name>dist</name>
@@ -28,13 +28,13 @@
     </dependency>
     
     <dependency>
-      <groupId>edu.umn.pubsub.client</groupId>
+      <groupId>edu.umn.bulletinboard.client</groupId>
       <artifactId>client</artifactId>
       <version>${project.version}</version>
     </dependency>
     
     <dependency>
-      <groupId>edu.umn.pubsub.server</groupId>
+      <groupId>edu.umn.bulletinboard.server</groupId>
       <artifactId>server</artifactId>
       <version>${project.version}</version>
     </dependency>  
@@ -53,14 +53,14 @@
                 </goals>
                 <configuration>
                   <tasks>
-                        <delete dir="target/pubsub-${project.version}"/>
-                        <delete dir="target/pubsub-${project.version}.tar.gz"/>
+                        <delete dir="target/bulletinboard-${project.version}"/>
+                        <delete dir="target/bulletinboard-${project.version}.tar.gz"/>
 
-                        <mkdir dir="target/pubsub-${project.version}"/>
-                        <mkdir dir="target/pubsub-${project.version}/lib"/>
-                        <mkdir dir="target/pubsub-${project.version}/bin"/>
+                        <mkdir dir="target/bulletinboard-${project.version}"/>
+                        <mkdir dir="target/bulletinboard-${project.version}/lib"/>
+                        <mkdir dir="target/bulletinboard-${project.version}/bin"/>
 
-                        <copy todir="target/pubsub-${project.version}" includeEmptyDirs="false" flatten="false">
+                        <copy todir="target/bulletinboard-${project.version}" includeEmptyDirs="false" flatten="false">
                           <fileset dir="../">
                             <include name="**/*" />
                             <exclude name="build/**" />
@@ -74,7 +74,7 @@
                           </fileset>
                         </copy>
 
-                        <copy todir="target/pubsub-${project.version}" includeEmptyDirs="false" flatten="false">
+                        <copy todir="target/bulletinboard-${project.version}" includeEmptyDirs="false" flatten="false">
                           <fileset dir="../client/target">
                             <include name="*.jar" />
                           </fileset>
@@ -86,17 +86,17 @@
                           </fileset>
                         </copy>
                         
-                        <copy todir="target/pubsub-${project.version}/bin" includeEmptyDirs="false" flatten="false">
+                        <copy todir="target/bulletinboard-${project.version}/bin" includeEmptyDirs="false" flatten="false">
                           <fileset dir="src/bin">
                             <include name="**" />
                           </fileset>
                         </copy>
 
-                        <tar destfile="target/pubsub-${project.version}.tar.gz" compression="gzip">
-                        <tarfileset dir="target/pubsub-${project.version}" prefix="pubsub-${project.version}" filemode="755">
+                        <tar destfile="target/bulletinboard-${project.version}.tar.gz" compression="gzip">
+                        <tarfileset dir="target/bulletinboard-${project.version}" prefix="bulletinboard-${project.version}" filemode="755">
                           <include name="**/*.sh" />
                         </tarfileset>
-                        <tarfileset dir="target/pubsub-${project.version}" prefix="pubsub-${project.version}">
+                        <tarfileset dir="target/bulletinboard-${project.version}" prefix="bulletinboard-${project.version}">
                           <include name="**/*"/>
                           <exclude name="**/*.sh"/>
                         </tarfileset>
