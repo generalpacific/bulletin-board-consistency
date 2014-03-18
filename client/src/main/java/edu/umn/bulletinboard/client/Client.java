@@ -1,4 +1,4 @@
-package edu.umn.pubsub.client;
+package edu.umn.bulletinboard.client;
 
 public class Client {
 

@@ -1,4 +1,4 @@
-package edu.umn.pubsub.server;
+package edu.umn.bulletinboard.server;
 
 public class Server {
 }
