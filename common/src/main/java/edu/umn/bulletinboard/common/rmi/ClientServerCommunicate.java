@@ -1,6 +1,7 @@
 package edu.umn.bulletinboard.common.rmi;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  * RMI interface to be implemented by each server for the communication between 
@@ -24,19 +25,19 @@ public interface ClientServerCommunicate extends Remote{
 	 * @param article
 	 * @return
 	 */
-	public int Post(String article);
+	public int Post(String article) throws RemoteException;
 	
 	/**
 	 * Reads the list of articles on the server. 
 	 */
-	public String Read();
+	public String Read() throws RemoteException;
 	
 	/**
 	 * Returns the article corresponding to the passed id.
 	 * @param id
 	 * @return
 	 */
-	public String Choose(int id);
+	public String Choose(int id) throws RemoteException;
 	
 	/**
 	 * Posts the reply to article with <code>id</code>.
@@ -46,6 +47,6 @@ public interface ClientServerCommunicate extends Remote{
 	 * @param id
 	 * @return
 	 */
-	public int Reply(String reply, int id);
+	public int Reply(String reply, int id) throws RemoteException;
 	
 }
