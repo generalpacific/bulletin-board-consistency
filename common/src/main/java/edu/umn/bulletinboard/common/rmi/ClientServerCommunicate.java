@@ -25,19 +25,19 @@ public interface ClientServerCommunicate extends Remote{
 	 * @param article
 	 * @return
 	 */
-	public int Post(String article) throws RemoteException;
+	public int post(String article) throws RemoteException;
 	
 	/**
 	 * Reads the list of articles on the server. 
 	 */
-	public String Read() throws RemoteException;
+	public String read() throws RemoteException;
 	
 	/**
 	 * Returns the article corresponding to the passed id.
 	 * @param id
 	 * @return
 	 */
-	public String Choose(int id) throws RemoteException;
+	public String choose(int id) throws RemoteException;
 	
 	/**
 	 * Posts the reply to article with <code>id</code>.
@@ -47,6 +47,6 @@ public interface ClientServerCommunicate extends Remote{
 	 * @param id
 	 * @return
 	 */
-	public int Reply(String reply, int id) throws RemoteException;
+	public int reply(String reply, int id) throws RemoteException;
 	
 }
