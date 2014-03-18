@@ -1,1 +1,1 @@
-This is a simple Bulletin Board System in which client can post, reply and read articles stored in the BB. The BB is maintained by a group of replicated servers that offer Sequential consistency, Quorun consistency and Read-your-Write consistency.
+This is a simple Bulletin Board System in which client can post, reply and read articles stored in the BB. The BB is maintained by a group of replicated servers that offer Sequential consistency, Quorum consistency and Read-your-Write consistency.
