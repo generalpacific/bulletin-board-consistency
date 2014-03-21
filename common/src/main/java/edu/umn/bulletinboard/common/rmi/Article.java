@@ -1,5 +1,6 @@
 package edu.umn.bulletinboard.common.rmi;
 
+
 /**
  * Encapsulates an article. It is assumed that the article will be 
  * 
@@ -42,12 +43,23 @@ public class Article {
 	 * @param text
 	 */
 	public void setMinText(String text) {
-		this.text = text.substring(0, MIN_TXT_LEN);
+		this.text = text.substring(0, 
+				(MIN_TXT_LEN > text.length()) ? text.length() : MIN_TXT_LEN);
 	}
 	
 	@Override
 	public String toString() {
 		return new String(id+": "+text);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (((Article)obj).getId() == this.getId() &&
+				((Article)obj).getText().equals(this.getText())) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 }
