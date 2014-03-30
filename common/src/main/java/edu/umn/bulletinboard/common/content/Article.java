@@ -1,6 +1,7 @@
 package edu.umn.bulletinboard.common.content;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,12 +27,23 @@ public class Article {
      * List of replies to this article.
      */
     private List<Integer> replies;
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    private boolean visited;
 	
 	private static final int MIN_TXT_LEN = 10;
 
     public Article(int id, String text) {
         this.id = id;
         this.text = text;
+        this.replies = new ArrayList<Integer>();
     }
 
 	public int getId() {
@@ -93,6 +105,6 @@ public class Article {
 
     @Override
     public String toString() {
-        return new String(id+": "+text);
+        return id+": "+text;
     }
 }
