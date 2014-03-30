@@ -35,10 +35,7 @@ public class Client {
 
 	private Remote client;
 
-	public Client(ServerInfo serverInfo) throws MalformedURLException,
-			RemoteException, NotBoundException {
-		startRMIClient(serverInfo);
-	}
+	public Client(){}
 
 	public Client(Remote client) throws MalformedURLException,
 			RemoteException, NotBoundException {
@@ -59,8 +56,12 @@ public class Client {
 			LogUtil.error("", e.getMessage());
 		} catch (RemoteException e) {
 			LogUtil.catchedRemoteException(e);
-		}
-	}
+		} catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Starts the shell and accepts commands. Ends when "exit" or "quit" is
@@ -116,35 +117,14 @@ public class Client {
 
 		try {
 
-			ServerInfo sInfo = null;
-
-			switch (args.length) {
-			case 2:
-				sInfo = new ServerInfo(args[0], Integer.parseInt(args[1]));
-				break;
-
-			case 3:
-				sInfo = new ServerInfo(args[0], RMIConstants.RMI_DEFAULT_PORT);
-
-			default:
-				LogUtil.info(USAGE_HELP);
-				return;
-			}
-
-			new Client(sInfo).startShell();
+			new Client().startShell();
 
 		} catch (RemoteException e) {
 			LogUtil.catchedRemoteException(e);
-		} catch (NotBoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalIPException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -156,12 +136,4 @@ public class Client {
 		}
 
 	}
-
-	private void startRMIClient(ServerInfo serverInfo)
-			throws MalformedURLException, RemoteException, NotBoundException {
-		client = (BulletinBoardService) Naming.lookup("rmi://"
-				+ serverInfo.getIp() + ":" + serverInfo.getPort() + "/"
-				+ RMIConstants.BB_SERVICE);
-	}
-
 }

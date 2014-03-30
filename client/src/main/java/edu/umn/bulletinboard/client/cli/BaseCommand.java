@@ -1,5 +1,7 @@
 package edu.umn.bulletinboard.client.cli;
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -28,8 +30,8 @@ public abstract class BaseCommand {
 	 * @throws RemoteException
 	 * @throws ClientNullException
 	 */
-	public abstract boolean execute(Remote client) 
-			throws NumberFormatException, RemoteException, ClientNullException;
+	public abstract boolean execute(Remote client)
+            throws NumberFormatException, RemoteException, ClientNullException, MalformedURLException, NotBoundException;
 	
 	protected String getArgument(int position) {
 		

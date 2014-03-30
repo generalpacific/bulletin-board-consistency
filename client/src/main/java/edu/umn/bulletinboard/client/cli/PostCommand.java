@@ -6,6 +6,11 @@ import java.rmi.RemoteException;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 
+/**
+ * Post a new article.
+ *
+ * @author Abhijeet
+ */
 public class PostCommand extends BaseCommand {
 
 	private static final int ARG_ARTICLE_TEXT = 1;
