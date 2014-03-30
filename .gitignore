@@ -12,3 +12,4 @@ target
 # Intellij files
 *.iml
 */*.iml
+.idea
