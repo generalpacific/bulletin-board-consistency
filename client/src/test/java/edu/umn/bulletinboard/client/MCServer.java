@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.umn.bulletinboard.common.rmi.Article;
-import edu.umn.bulletinboard.common.rmi.ClientServerCommunicate;
+import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.util.ConsistencyType;
 
 /**
  * Server Mocked to test client only.
@@ -15,7 +16,7 @@ import edu.umn.bulletinboard.common.rmi.ClientServerCommunicate;
  * @author Abhijeet
  *
  */
-public class MCServer implements ClientServerCommunicate {
+public class MCServer implements BulletinBoardService {
 	
 	/**
 	 * This is an append only list, items will never be
@@ -25,20 +26,17 @@ public class MCServer implements ClientServerCommunicate {
 	
 	private Map<Integer, List<Integer>> articleMap = new HashMap<Integer, List<Integer>>();
 	private int counter = 0;
-	
 
-	@Override
-	public int post(Article article) throws RemoteException {
-		
-		article.setId(++counter);
-		articles.add(article);
-		
-		return counter;
-	}
+    @Override
+    public int post(String article) throws RemoteException {
 
-	@Override
-	public List<Article> read() throws RemoteException {
-		return articles;
+        articles.add(new Article(++counter, article));
+        return counter;
+    }
+
+    @Override
+	public String read() throws RemoteException {
+		return articles.toString();
 	}
 
 	@Override
@@ -52,7 +50,7 @@ public class MCServer implements ClientServerCommunicate {
 
 	@Override
 	public int reply(int id, Article reply) throws RemoteException {
-		int newId = post(reply);
+		int newId = post(reply.getText());
 		
 		if (articleMap.get(id) == null) {
 			List<Integer> list = new ArrayList<Integer>();
@@ -64,8 +62,63 @@ public class MCServer implements ClientServerCommunicate {
 		
 		return newId;
 	}
-	
-	//helper methods
+
+    @Override
+    public List<Article> readFromCoordinatingServer(ConsistencyType type) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public Article chooseFromCoordinatingServer(int id, ConsistencyType type) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public int writeToCoordinatingServer(Article articleText, ConsistencyType type) throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public int replyToCoordinatingServer(int articleId, ConsistencyType type) throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public int getNextArticleID() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public int register() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public void sync(List<Article> articles) throws RemoteException {
+
+    }
+
+    @Override
+    public void writeToServer(int articleId, String articleText) throws RemoteException {
+
+    }
+
+    @Override
+    public String readFromServer(int articleId) throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public int getLatestArticleId() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public void addServer(int serverId) throws RemoteException {
+
+    }
+
+    //helper methods
 	public void destroyData() {
 	
 		articles = new ArrayList<Article>();

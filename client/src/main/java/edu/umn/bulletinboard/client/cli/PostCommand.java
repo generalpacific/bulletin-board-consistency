@@ -4,8 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
-import edu.umn.bulletinboard.common.rmi.Article;
-import edu.umn.bulletinboard.common.rmi.ClientServerCommunicate;
+import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 
 public class PostCommand extends BaseCommand {
 
@@ -19,12 +19,7 @@ public class PostCommand extends BaseCommand {
 	public boolean execute(Remote client) throws NumberFormatException, RemoteException,
 			ClientNullException {
 		
-		Article article = new Article();
-	
-		article.setId(-1);
-		article.setText(getArgument(ARG_ARTICLE_TEXT));
-		
-		((ClientServerCommunicate) client).post(article);
+		((BulletinBoardService) client).post(getArgument(ARG_ARTICLE_TEXT));
 		return true;
 	}
 

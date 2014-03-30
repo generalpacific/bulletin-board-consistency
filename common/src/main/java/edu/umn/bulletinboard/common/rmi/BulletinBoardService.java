@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.umn.bulletinboard.common.util.ConsistencyType;
+import edu.umn.bulletinboard.common.content.Article;
 
 /**
  * RMI interface to be implemented by each server for the communication between 
@@ -49,7 +50,7 @@ public interface BulletinBoardService extends Remote {
 	 * @param article
 	 * @return
 	 */
-	public int post(Article article) throws RemoteException;
+	public int post(String article) throws RemoteException;
 	
 	/**
 	 * Reads the list of articles on the server.

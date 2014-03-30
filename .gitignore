@@ -8,3 +8,7 @@ target
 */target
 */.project
 */.classpath
+
+# Intellij files
+*.iml
+*/*.iml

@@ -16,7 +16,7 @@ import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.client.exceptions.IllegalCommandException;
 import edu.umn.bulletinboard.common.constants.RMIConstants;
 import edu.umn.bulletinboard.common.exception.IllegalIPException;
-import edu.umn.bulletinboard.common.rmi.ClientServerCommunicate;
+import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.LogUtil;
 
@@ -159,7 +159,7 @@ public class Client {
 
 	private void startRMIClient(ServerInfo serverInfo)
 			throws MalformedURLException, RemoteException, NotBoundException {
-		client = (ClientServerCommunicate) Naming.lookup("rmi://"
+		client = (BulletinBoardService) Naming.lookup("rmi://"
 				+ serverInfo.getIp() + ":" + serverInfo.getPort() + "/"
 				+ RMIConstants.BB_SERVICE);
 	}

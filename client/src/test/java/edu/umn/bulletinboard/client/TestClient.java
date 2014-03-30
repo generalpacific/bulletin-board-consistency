@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
-import edu.umn.bulletinboard.common.rmi.Article;
+import edu.umn.bulletinboard.common.content.Article;
 
 /**
  * Tests shell client. Mocks RMI Server.
@@ -50,9 +50,7 @@ public class TestClient {
 		try {
 			for (int i = 0; i < 4; ++i) {
 				cli.executeCmd(prepPostArgs(++counter));
-				Article e = new Article();
-				e.setId(counter);
-				e.setMinText("Article"+counter);
+				Article e = new Article(counter, "Article"+counter);
 				arti.add(e);
 			}
 			

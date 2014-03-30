@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
-import edu.umn.bulletinboard.common.rmi.ServerCoordinatorCommunicate;
+import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.common.validator.ContentValidator;
 
@@ -29,7 +29,7 @@ public class Server {
 	private static int coordinatingServerRMIPort = -1;
 	private static String serverIp = null;
 	private static int serverRMIPort = -1;
-	private static ServerCoordinatorCommunicate coordinatorServerRMIObjectHandle = null;
+	private static BulletinBoardService coordinatorServerRMIObjectHandle = null;
 	
 	public static void main(String args[]) {
 		final String method = CLASS_NAME + ".main()";
@@ -63,7 +63,7 @@ public class Server {
 		serverRMIPort = Integer.parseInt(args[3]);
 		
 		try {
-			coordinatorServerRMIObjectHandle = (ServerCoordinatorCommunicate) Naming.lookup("rmi://" + coordinatingServerIp
+			coordinatorServerRMIObjectHandle = (BulletinBoardService) Naming.lookup("rmi://" + coordinatingServerIp
 					+ ":" + coordinatingServerRMIPort + "/"
 					+ RMIConstants.COORDINATOR_BB_SERVICE);
 		} catch (MalformedURLException e) {
@@ -83,7 +83,7 @@ public class Server {
 		// Bind the PubSubService RMI Registry
 		try {
 			LocateRegistry.createRegistry(serverRMIPort);
-			Naming.rebind(RMIConstants.BB_SERVICE, BulletinBoardService.getInstance());
+			Naming.rebind(RMIConstants.BB_SERVICE, BulletinBoardServiceImpl.getInstance());
 		} catch (RemoteException e) {
 			LogUtil.log(method, "Got exception " + e.getMessage() + ". Exiting.");
 			System.exit(1);
@@ -94,7 +94,7 @@ public class Server {
 		LogUtil.log(method, "DONE Binding " + RMIConstants.BB_SERVICE);	
 	}
 	
-	public static ServerCoordinatorCommunicate getCoodinatorServerRMIObjectHandle() {
+	public static BulletinBoardService getCoodinatorServerRMIObjectHandle() {
 		return coordinatorServerRMIObjectHandle;
 	}
 }
