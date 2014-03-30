@@ -2,11 +2,11 @@ package edu.umn.bulletinboard.common.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.List;
 
-import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.server.ServerInfo;
+import edu.umn.bulletinboard.common.util.ConsistencyType;
 
 /**
  * RMI interface to be implemented by each server for the communication between 
@@ -123,7 +123,14 @@ public interface BulletinBoardService extends Remote {
 	 * Registers the current server to the coordinating server.
 	 * Returns the server id for the server.  
 	 */
-	public int register() throws RemoteException;
+	public int register(String ip, int port) throws RemoteException;
+	
+	/**
+	 * Returns the list of registered servers.
+	 * @return
+	 * @throws RemoteException
+	 */
+	public List<ServerInfo> getRegisteredServers() throws RemoteException;
 	
 	/**
 	 * Sync the articles on the server with the passed articles.

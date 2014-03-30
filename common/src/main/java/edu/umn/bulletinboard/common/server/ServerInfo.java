@@ -9,6 +9,7 @@ import edu.umn.bulletinboard.common.validator.ContentValidator;
  *
  */
 public final class ServerInfo {
+	private int serverId;
 	private String ip;
 	private int port;
 	private String bindingName;
@@ -24,6 +25,21 @@ public final class ServerInfo {
 			throw new IllegalIPException("Invalid Ip" + ip);
 		}
 		this.ip = ip;
+		this.port = port;
+	}
+	
+	/**
+	 * This will constructor will throw {@link IllegalArgumentException} if the ip is not valid
+	 * @param ip
+	 * @param port
+	 * @throws IllegalArgumentException
+	 */
+	public ServerInfo(int serverId,String ip, int port) throws IllegalIPException{
+		if(!ContentValidator.isValidIp(ip)) {
+			throw new IllegalIPException("Invalid Ip" + ip);
+		}
+		this.ip = ip;
+		this.serverId = serverId;
 		this.port = port;
 	}
 	
@@ -52,6 +68,10 @@ public final class ServerInfo {
 	
 	public String getBindingName() {
 		return bindingName;
+	}
+	
+	public int getServerId() {
+		return serverId;
 	}
 	
 	@Override

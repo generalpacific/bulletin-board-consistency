@@ -8,6 +8,7 @@ import java.util.Map;
 
 import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 
 /**
@@ -89,7 +90,7 @@ public class MCServer implements BulletinBoardService {
     }
 
     @Override
-    public int register() throws RemoteException {
+    public int register(String ip, int port) throws RemoteException {
         return 0;
     }
 
@@ -137,6 +138,12 @@ public class MCServer implements BulletinBoardService {
 		}
 
 		return true;
+	}
+
+	@Override
+	public List<ServerInfo> getRegisteredServers() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

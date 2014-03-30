@@ -4,7 +4,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
-import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 
 public class PostCommand extends BaseCommand {

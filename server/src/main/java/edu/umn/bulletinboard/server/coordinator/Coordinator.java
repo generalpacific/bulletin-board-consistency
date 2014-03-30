@@ -1,16 +1,12 @@
 package edu.umn.bulletinboard.server.coordinator;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.umn.bulletinboard.common.constants.RMIConstants;
 import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
-import edu.umn.bulletinboard.common.util.LogUtil;
 
 /**
  * @author abhijeet

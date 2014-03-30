@@ -6,6 +6,5 @@ public final class RMIConstants {
 	}
 	
 	public static final String BB_SERVICE = "BulletinBoardService";
-	public static final String COORDINATOR_BB_SERVICE = "CoordinatorBulletinBoardService"; 
 	public static final int RMI_DEFAULT_PORT = 1099;
 }

@@ -1,11 +1,12 @@
 package edu.umn.bulletinboard.server;
 
-import edu.umn.bulletinboard.common.content.Article;
-import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
-import edu.umn.bulletinboard.common.util.ConsistencyType;
-
 import java.rmi.RemoteException;
 import java.util.List;
+
+import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.server.ServerInfo;
+import edu.umn.bulletinboard.common.util.ConsistencyType;
 
 /**
  * Created by Abhijeet on 3/29/2014.
@@ -15,6 +16,8 @@ import java.util.List;
 public class BulletinBoardServiceImpl implements BulletinBoardService{
 
     private static BulletinBoardServiceImpl bb = null;
+    private final ServerBulletinBoardServiceImpl serverImpl = new ServerBulletinBoardServiceImpl();
+    private final CoordinatorServerBulletinBoardServiceImpl coordServerImpl = new CoordinatorServerBulletinBoardServiceImpl();
 
     private BulletinBoardServiceImpl() {
     }
@@ -28,76 +31,81 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
     @Override
     public int post(String article) throws RemoteException {
-        return 0;
+        return serverImpl.post(article);
     }
 
     @Override
     public String read() throws RemoteException {
-        return null;
+        return serverImpl.read();
     }
 
     @Override
     public Article choose(int id) throws RemoteException {
-        return null;
+        return serverImpl.choose(id);
     }
 
     @Override
     public int reply(int id, Article reply) throws RemoteException {
-        return 0;
+        return serverImpl.reply(id, reply);
     }
 
     @Override
     public List<Article> readFromCoordinatingServer(ConsistencyType type) throws RemoteException {
-        return null;
+        return coordServerImpl.readFromCoordinatingServer(type);
     }
 
     @Override
     public Article chooseFromCoordinatingServer(int id, ConsistencyType type) throws RemoteException {
-        return null;
+        return coordServerImpl.chooseFromCoordinatingServer(id, type);
     }
 
     @Override
     public int writeToCoordinatingServer(Article articleText, ConsistencyType type) throws RemoteException {
-        return 0;
+        return coordServerImpl.writeToCoordinatingServer(articleText, type);
     }
 
     @Override
     public int replyToCoordinatingServer(int articleId, ConsistencyType type) throws RemoteException {
-        return 0;
+        return coordServerImpl.replyToCoordinatingServer(articleId, type);
     }
 
     @Override
     public int getNextArticleID() throws RemoteException {
-        return 0;
+        return coordServerImpl.getNextArticleID();
     }
 
     @Override
-    public int register() throws RemoteException {
-        return 0;
+    public int register(String ip, int port) throws RemoteException {
+        return coordServerImpl.register(ip, port);
     }
 
     @Override
     public void sync(List<Article> articles) throws RemoteException {
-
+    	coordServerImpl.sync(articles);
     }
 
     @Override
     public void writeToServer(int articleId, String articleText) throws RemoteException {
-
+    	serverImpl.writeToServer(articleId, articleText);
     }
 
     @Override
     public String readFromServer(int articleId) throws RemoteException {
-        return null;
+        return serverImpl.readFromServer(articleId);
     }
 
     @Override
     public int getLatestArticleId() throws RemoteException {
-        return 0;
+        return serverImpl.getLatestArticleId();
     }
 
     @Override
     public void addServer(int serverId) throws RemoteException {
-
+    	serverImpl.addServer(serverId);
     }
+
+	@Override
+	public List<ServerInfo> getRegisteredServers() throws RemoteException {
+		return serverImpl.getRegisteredServers();
+	}
 }
