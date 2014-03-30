@@ -1,10 +1,8 @@
 package edu.umn.bulletinboard.server;
 
 import java.rmi.RemoteException;
-import java.util.List;
 
 import edu.umn.bulletinboard.common.content.Article;
-import edu.umn.bulletinboard.common.server.ServerInfo;
 
 public class ServerBulletinBoardServiceImpl {
 	    public int post(String article) throws RemoteException {
@@ -36,12 +34,7 @@ public class ServerBulletinBoardServiceImpl {
 	    }
 
 	    public void addServer(int serverId) throws RemoteException {
-
+	    
 	    }
-
-		public List<ServerInfo> getRegisteredServers() throws RemoteException {
-			// TODO Auto-generated method stub
-			return null;
-		}
 
 }

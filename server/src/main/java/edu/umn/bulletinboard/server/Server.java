@@ -5,9 +5,12 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.common.validator.ContentValidator;
 
@@ -30,6 +33,8 @@ public class Server {
 	private static String serverIp = null;
 	private static int serverRMIPort = -1;
 	private static BulletinBoardService coordinatorServerRMIObjectHandle = null;
+	private static int serverId = -1;
+	private static List<ServerInfo> servers = new ArrayList<ServerInfo>();
 	
 	public static void main(String args[]) {
 		final String method = CLASS_NAME + ".main()";
@@ -65,7 +70,7 @@ public class Server {
 		try {
 			coordinatorServerRMIObjectHandle = (BulletinBoardService) Naming.lookup("rmi://" + coordinatingServerIp
 					+ ":" + coordinatingServerRMIPort + "/"
-					+ RMIConstants.COORDINATOR_BB_SERVICE);
+					+ RMIConstants.BB_SERVICE);
 		} catch (MalformedURLException e) {
 			LogUtil.log(method, "Got exception " + e.getMessage() + ". Exiting.");
 			System.exit(1);
@@ -74,6 +79,19 @@ public class Server {
 			System.exit(1);
 		} catch (NotBoundException e) {
 			LogUtil.log(method, "Got exception " + e.getMessage() + ". Exiting.");
+			System.exit(1);
+		}
+		
+		try {
+			serverId = coordinatorServerRMIObjectHandle.register(serverIp, serverRMIPort);
+		} catch (RemoteException e1) {
+			LogUtil.log(method, "Cannot register to the coordinating server " + e1.getMessage() + ". Exiting.");
+			System.exit(1);
+		}
+		try {
+			servers.addAll(coordinatorServerRMIObjectHandle.getRegisteredServers());
+		} catch (RemoteException e1) {
+			LogUtil.log(method, "Cannot get registered servers from the coordinating server " + e1.getMessage() + ". Exiting.");
 			System.exit(1);
 		}
 		
@@ -96,5 +114,13 @@ public class Server {
 	
 	public static BulletinBoardService getCoodinatorServerRMIObjectHandle() {
 		return coordinatorServerRMIObjectHandle;
+	}
+	
+	public static List<ServerInfo> getServers() {
+		return servers;
+	}
+	
+	public static int getServerId() {
+		return serverId;
 	}
 }

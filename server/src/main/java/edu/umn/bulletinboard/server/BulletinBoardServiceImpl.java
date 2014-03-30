@@ -7,6 +7,7 @@ import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
+import edu.umn.bulletinboard.server.coordinator.Coordinator;
 
 /**
  * Created by Abhijeet on 3/29/2014.
@@ -17,7 +18,7 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
     private static BulletinBoardServiceImpl bb = null;
     private final ServerBulletinBoardServiceImpl serverImpl = new ServerBulletinBoardServiceImpl();
-    private final CoordinatorServerBulletinBoardServiceImpl coordServerImpl = new CoordinatorServerBulletinBoardServiceImpl();
+    private final Coordinator coordServerImpl = new Coordinator();
 
     private BulletinBoardServiceImpl() {
     }
@@ -106,6 +107,6 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
 	@Override
 	public List<ServerInfo> getRegisteredServers() throws RemoteException {
-		return serverImpl.getRegisteredServers();
+		return coordServerImpl.getRegisteredServers();
 	}
 }

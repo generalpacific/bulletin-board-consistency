@@ -111,8 +111,15 @@ public class Coordinator {
      * @return server id
      * @throws RemoteException
      */
-    public int register() throws RemoteException {
+    public int register(String ip, int port) throws RemoteException {
         return 0;
     }
 
+    public void sync(List<Article> articles) throws RemoteException {
+
+    }
+    
+    public List<ServerInfo> getRegisteredServers() throws RemoteException {
+		return null;
+	}
 }
