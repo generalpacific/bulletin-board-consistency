@@ -7,12 +7,12 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
+import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.server.coordinator.Coordinator;
-import edu.umn.bulletinboard.server.storage.MemStore;
 
 public class CoordinatorSyncThread implements Callable<Boolean> {
 	
@@ -30,11 +30,12 @@ public class CoordinatorSyncThread implements Callable<Boolean> {
 			//TODO get list from coordinator
 			LogUtil.log("CoordinatorSyncThread.call()", "Syncing ");
 			Set<ServerInfo> servers = Coordinator.getInstance().getServers();
+			List<Article> readFromCoordinatingServer = Coordinator.getInstance().readFromCoordinatingServer(ConsistencyType.QUORUM);
 			for (ServerInfo serverInfo : servers) {
 				BulletinBoardService server = (BulletinBoardService) Naming.lookup("rmi://" + serverInfo.getIp()
 						+ ":" + serverInfo.getPort() + "/"
 						+ RMIConstants.BB_SERVICE);
-				server.sync(new ArrayList(MemStore.getInstance().getAllArticles().values()));
+				server.sync(new ArrayList(readFromCoordinatingServer));
 			}
 			Thread.sleep(WAIT_INTERVAL);
 			++i;
