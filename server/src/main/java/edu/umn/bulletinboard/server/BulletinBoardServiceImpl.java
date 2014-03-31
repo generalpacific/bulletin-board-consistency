@@ -68,7 +68,7 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
     }
 
     @Override
-    public int replyToCoordinatingServer(int articleId, ConsistencyType type) throws RemoteException {
+    public int replyToCoordinatingServer(int articleId, Article article, ConsistencyType type) throws RemoteException {
         return coordServerImpl.replyToCoordinatingServer(articleId, type);
     }
 
@@ -88,8 +88,8 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
     }
 
     @Override
-    public void writeToServer(int articleId, String articleText) throws RemoteException {
-    	serverImpl.writeToServer(articleId, articleText);
+    public void writeToServer(Article article) throws RemoteException {
+    	serverImpl.writeToServer(article.getId(), article.getText());
     }
 
     @Override
@@ -120,5 +120,11 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 	@Override
 	public List<Article> readFromServer() throws RemoteException {
 		return serverImpl.readFromServer();
+	}
+
+	@Override
+	public void replyToServer(int id, Article article) throws RemoteException {
+		// TODO Auto-generated method stub
+		
 	}
 }

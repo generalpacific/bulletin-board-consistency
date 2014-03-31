@@ -81,7 +81,7 @@ public class MCServer implements BulletinBoardService {
     }
 
     @Override
-    public int replyToCoordinatingServer(int articleId, ConsistencyType type) throws RemoteException {
+    public int replyToCoordinatingServer(int articleId, Article article, ConsistencyType type) throws RemoteException {
         return 0;
     }
 
@@ -101,7 +101,7 @@ public class MCServer implements BulletinBoardService {
     }
 
     @Override
-    public void writeToServer(int articleId, String articleText) throws RemoteException {
+    public void writeToServer(Article article) throws RemoteException {
 
     }
 
@@ -151,6 +151,12 @@ public class MCServer implements BulletinBoardService {
 	public List<Article> readFromServer() throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void replyToServer(int id, Article article) throws RemoteException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

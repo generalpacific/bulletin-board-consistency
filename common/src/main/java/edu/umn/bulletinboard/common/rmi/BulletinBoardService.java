@@ -110,7 +110,7 @@ public interface BulletinBoardService extends Remote {
 	 * @return
 	 * @throws RemoteException
 	 */
-	public int replyToCoordinatingServer(int articleId, ConsistencyType type) throws RemoteException;
+	public int replyToCoordinatingServer(int articleId,Article article, ConsistencyType type) throws RemoteException;
 	
 	/**
 	 * Get next unique Article ID. This will be unique across all the servers.
@@ -145,7 +145,14 @@ public interface BulletinBoardService extends Remote {
 	 *  
 	 * @throws RemoteException
 	 */
-	public void writeToServer(int articleId, String articleText) throws RemoteException;
+	public void writeToServer(Article article) throws RemoteException;
+	
+	/**
+	 * Replies to the article with id to the server.
+	 *  
+	 * @throws RemoteException
+	 */
+	public void replyToServer(int id, Article article) throws RemoteException;
 	
 	/**
 	 * Read article from server with the given articleId.
