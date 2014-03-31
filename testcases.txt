@@ -79,7 +79,7 @@ Commands:
   read
   disconnect
   
-5. Start server with wrong Nr, Nw values
+5. Start server with wrong Nr, Nw values (logical Nw>N/2 and Nr+Nw > N). Client will get a remote exception in this case.
 
 6. Execute choose before read, should give error. For more explanation see design.txt.
 
@@ -87,6 +87,14 @@ Commands:
 
 8. Test invalid reply and choose. Reply and choose and invalid article id.
 
-9. execute operations without connecting to server, i.e., without calling connect first.
+9. Execute operations without connecting to server, i.e., without calling connect first.
 
-10. 
+10. Server: Invalid arguments (rmi server, rmi port and properties file are invalid).
+
+11. Server Config : if consistency type is quorum and Nr and Nw are not given ,error out.
+
+12. If consistency type is not mentioned in server config, error out.
+
+13. Invalid command should not be executed.
+
+14. If Nr and Nw are invalid or negative numbers you cannot start the server.
