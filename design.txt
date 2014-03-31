@@ -1,5 +1,9 @@
 This document explains the design of Bulletin Board System.
 
+Communication:
+We use RMI to communicate between the servers and client-server. Detailed interface:
+PROJ_HOME/common/src/main/java/edu/umn/bulletinboard/common/rmi/BulletinBoardService.java
+
 Client:
 Client starts a shell, these commands can be used at command line:
   -- connect server_ip server_port
@@ -64,7 +68,7 @@ Quorum Consistency:
   article id and gets the data from that server. This data is returned to the client as a string: in ready
   to display form.
   
-  Sync: Sync is called after every 5 seconds in the background. Data is collected from Server with the 
+  Sync: Sync is called after every 30 seconds in the background. Data is collected from Server with the 
   latest update and broadcast to all the servers. After this operation all servers will have up to
   date data.
 
@@ -79,7 +83,7 @@ Read Your Write Consistency:
   performance as no call is made to the server. However, as we do not clear the cache intermittently,
   it is bound to use up a lot of memory. We assume that sufficient memory is available on client.
 
-  Sync: Sync is called every 5 seconds. After 5 seconds all servers will be in sync.
+  Sync: Sync is called every 30 seconds.
   
 Overall Notes, assumptions:
   -- Read call does not show trimmed output. It shows whole text of the article. This is a disadvantage
@@ -87,4 +91,14 @@ Overall Notes, assumptions:
   -- All server to server communication sleeps for random time ranging between 200 - 300 ms. This is to
      emulate wide-area networks.
   -- Currently all the articles are displayed on console in one go. No paged display is provided.
+  
+Performance Runs:
+  Quorum read : PROJ_HOME/graphs/qr.jpeg
+  Quorum write : PROJ_HOME/graphs/qw.jpeg
+  Sequential read : PROJ_HOME/graphs/sr.jpeg
+  Sequential write : PROJ_HOME/graphs/sw.jpeg
+  Read-your-Write read : PROJ_HOME/graphs/rywr.jpeg
+  Read-your-Write write : PROJ_HOME/graphs/ryww.jpeg
+  Quorum different configurations: PROJ_HOME/graphs/quorum.jpeg
+  
 

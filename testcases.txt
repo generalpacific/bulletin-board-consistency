@@ -1,7 +1,6 @@
 Test cases:
 
-Sequential:
-  1. client - server
+1. Sequential:
   Execute few commands from client1 to server1
   Execute read command on client2 which connects to server2
 
@@ -22,7 +21,7 @@ Sequential:
 
   All reads give latest values.
 	
-Quorum:
+2. Quorum:
   start 5 servers, 2 clients
   Nw = 3, Nr = 3
   
@@ -49,7 +48,7 @@ Quorum:
   All reads should show all the outputs. Writes should give more performance than sequential.
   Reads should be expensive.
 	
-Read Your Write:
+3. Read Your Write:
   connect 128.101.35.195
   post article1
   post article2
@@ -60,8 +59,24 @@ Read Your Write:
   read
   disconnect
 
-  The second read should take a lot of time as it is sent to server.
+  The second read should take a comparatively more time as it is sent to server.
   While first read is retrieved from cache, so faster read.
 
+4. Nested Printing:
+Commands:
+  connect 128.101.35.195
+  post article1
+  post article2
+  read
+  reply 1 article3
+  reply 3 article4
+  post article 5
+  reply 2 article6
+  read
+  disconnect
   
-  
+5. Start server with wrong Nr, Nw values
+
+6. Execute choose before read, should give error. For more explanation see design.txt.
+
+7. Test latest article id generation at coordinator by running two clients at the same time.
