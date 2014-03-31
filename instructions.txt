@@ -31,7 +31,7 @@ Steps to Run:
 		NW: Write Quorum
 		coordinatingServerIp: Coordinating RMI Server IP.
 		coordinatingServerRMIPort: Coordinating RMI Server port.
-		consistencyType: Consistency Type (can be: `Quorum`, `Sequential`, `RYW` only).
+		consistencyType: Consistency Type (can be: `Quorum`, `Sequential`, `Read-your-Write` only).
 		
 		If coordinatingServerIp and coordinatingServerRMIPort are not present in the conf file, the server is considered as coordinator.
 	  

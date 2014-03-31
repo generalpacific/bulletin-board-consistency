@@ -72,7 +72,7 @@ Read Your Write Consistency:
  
   Write: Write operation writes the data to the server. It also maintains a cache. All the data that was
   written by the client is retrieved from the cache when read is called. This makes sure that the client 
-  always gets the articles that it has written previously. On Disconnect all of the cache is cleared.
+  always gets the articles that it has written previously. On exit all of the cache is cleared.
   
   Read: A client will have a cache, so the data is returned locally from the client cache. This improves
   performance as no call is made to the server. However, as we do not clear the cache intermittently,
