@@ -15,7 +15,7 @@ import edu.umn.bulletinboard.server.coordinator.Coordinator;
 
 public class CoordinatorSyncThread implements Callable<Boolean> {
 	
-	private final long WAIT_INTERVAL = 5 * 1000;
+	private final long WAIT_INTERVAL = 30 * 1000;
 	private final static String CLASS_NAME = CoordinatorSyncThread.class.getSimpleName();
 
 	@Override
@@ -33,15 +33,21 @@ public class CoordinatorSyncThread implements Callable<Boolean> {
 			if(i == Integer.MAX_VALUE) {
 				break;
 			}
-			LogUtil.log("CoordinatorSyncThread.call()", "Syncing ");
-			Set<ServerInfo> servers = Coordinator.getInstance().getServers();
-			List<Article> readFromCoordinatingServer = Coordinator.getInstance().readFromCoordinatingServer(ConsistencyType.QUORUM);
-			for (ServerInfo serverInfo : servers) {
-				LogUtil.log(method, "Syncing articles:" + readFromCoordinatingServer + " with server:" + serverInfo);
-				BulletinBoardService server = (BulletinBoardService) Naming.lookup("rmi://" + serverInfo.getIp()
-						+ ":" + serverInfo.getPort() + "/"
-						+ RMIConstants.BB_SERVICE);
-				server.sync(readFromCoordinatingServer);
+			try {
+				LogUtil.log("CoordinatorSyncThread.call()", "Syncing ");
+				Set<ServerInfo> servers = Coordinator.getInstance().getServers();
+				List<Article> readFromCoordinatingServer = Coordinator.getInstance().readFromCoordinatingServer(ConsistencyType.QUORUM);
+				for (ServerInfo serverInfo : servers) {
+					LogUtil.log(method, "Syncing articles:" + readFromCoordinatingServer + " with server:" + serverInfo);
+					BulletinBoardService server = (BulletinBoardService) Naming.lookup("rmi://" + serverInfo.getIp()
+							+ ":" + serverInfo.getPort() + "/"
+							+ RMIConstants.BB_SERVICE);
+					server.sync(readFromCoordinatingServer);
+				}
+			}catch(Exception ex) {
+				LogUtil.log(method, "Got exception : " + ex.getMessage());
+				LogUtil.log(method, "Details : ");
+				ex.printStackTrace();
 			}
 		}
 		return null;
