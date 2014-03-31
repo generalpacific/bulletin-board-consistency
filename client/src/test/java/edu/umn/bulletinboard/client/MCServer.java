@@ -106,7 +106,7 @@ public class MCServer implements BulletinBoardService {
     }
 
     @Override
-    public String readFromServer(int articleId) throws RemoteException {
+    public Article readFromServer(int articleId) throws RemoteException {
         return null;
     }
 
