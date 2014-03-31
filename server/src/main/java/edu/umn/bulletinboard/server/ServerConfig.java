@@ -30,9 +30,9 @@ public class ServerConfig {
 	private static int NR = -1;
 	private static int NW = -1;
 	
-	public static void loadProperties() {
+	public static void loadProperties(String filename) {
 		final String method = CLASS_NAME + ".loadProperties()"; 
-		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("./config.properties");
+		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
 		if(input == null){
 	        LogUtil.log(method,"Sorry, unable to find " + "config.properties" + ". Exiting.");
 		    System.exit(1);

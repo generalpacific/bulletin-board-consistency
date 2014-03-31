@@ -41,8 +41,8 @@ public class Server {
 	
 	public static void main(String args[]) {
 		final String method = CLASS_NAME + ".main()";
-		if(args.length != 2) {
-			LogUtil.log(method, "Invalid cli arguments. Usage server <server ip> <server rmi port>");
+		if(args.length != 3) {
+			LogUtil.log(method, "Invalid cli arguments. Usage server <server ip> <server rmi port> <Configuration filename>");
 			return;
 		}
 		
@@ -58,7 +58,7 @@ public class Server {
 		}
 		serverRMIPort = Integer.parseInt(args[1]);
 		
-		ServerConfig.loadProperties();
+		ServerConfig.loadProperties(args[2]);
 		
 		LogUtil.log(method, "Getting the CoordinatorServerRMIObject");
 		try {
