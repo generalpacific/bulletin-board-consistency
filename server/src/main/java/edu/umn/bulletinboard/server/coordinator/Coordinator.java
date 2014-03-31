@@ -236,6 +236,15 @@ public class Coordinator {
         //quorum consistency
         //add the article
 
+        //get latest parent
+        Article parent = null;
+        if (-1 != id ) {
+            int updatedServerId = getLatestUpdatedServerId();
+            BulletinBoardService client = getClient(servers.get(updatedServerId)
+                    , updatedServerId);
+            parent = client.readFromServer(id);
+        }
+
         List<Integer> alreadySent = new ArrayList<Integer>();
         Random random = new Random();
         for (int i = 0; i < getNW(); ++i) {
@@ -263,6 +272,7 @@ public class Coordinator {
                 client.writeToServer(articleText);
             } else {
             	TimeUtil.delay();
+                client.writeToServer(parent);
                 client.replyToServer(id, articleText);
             }
         }
