@@ -112,9 +112,10 @@ public class Coordinator {
             alreadyRead.add(servId);
 
             BulletinBoardService client = getClient(serverInfo,servId);
-            if (client.getLatestArticleId() > max) {
-            	TimeUtil.delay();
-                max = client.getLatestArticleId();
+            TimeUtil.delay();
+            int latestArticleId = client.getLatestArticleId();
+			if (latestArticleId > max) {
+                max = latestArticleId;
                 maxServer = servId;
             }
         }

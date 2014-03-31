@@ -134,7 +134,8 @@ public class Server {
 				LogUtil.log(method, "Got exception in sync thread : " + e.getMessage());
 				Throwable cause = e.getCause();
 				if(cause != null) {
-					LogUtil.log(method, "Exception Details: " + cause.getMessage());
+					LogUtil.log(method, "Exception Details: ");
+					cause.printStackTrace();
 				}
 			}
 			LogUtil.log(method, "DONE Starting the sync thread for coordinator");
