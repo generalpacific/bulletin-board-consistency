@@ -1,5 +1,7 @@
 package edu.umn.bulletinboard.common.server;
 
+import java.io.Serializable;
+
 import edu.umn.bulletinboard.common.exception.IllegalIPException;
 import edu.umn.bulletinboard.common.validator.ContentValidator;
 
@@ -8,7 +10,11 @@ import edu.umn.bulletinboard.common.validator.ContentValidator;
  * @author prashant
  *
  */
-public final class ServerInfo {
+public final class ServerInfo implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7388046600706658664L;
 	private int serverId;
 	private String ip;
 	private int port;
