@@ -148,7 +148,7 @@ public class MCServer implements BulletinBoardService {
 	}
 
 	@Override
-	public List<Article> readFromServer() throws RemoteException {
+	public String readFromServer() throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

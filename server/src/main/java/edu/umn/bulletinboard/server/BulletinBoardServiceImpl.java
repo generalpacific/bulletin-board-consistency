@@ -118,8 +118,7 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 	}
 
 	@Override
-	public List<Article> readFromServer() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public String readFromServer() throws RemoteException {
+		return serverImpl.readFromServer();
 	}
 }
