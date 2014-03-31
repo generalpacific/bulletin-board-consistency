@@ -87,7 +87,7 @@ public class ServerBulletinBoardServiceImpl {
 		public  List<Article> readFromServer() {
 			final String method = CLASS_NAME + ".readFromServer()";
 	    	LogUtil.log(method, "Server:"+  Server.getServerId() + " " +  "Reading all articles from server");
-			return new ArrayList(MemStore.getInstance().getAllArticles().values());
+			return new ArrayList<Article>(MemStore.getInstance().getAllArticles().values());
 		}
 
 		public  void sync(List<Article> articles) {

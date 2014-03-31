@@ -75,6 +75,9 @@ public class ServerConfig {
 			System.exit(1);
 		}
 		consistencyType = tempType;
+		if(consistencyType.equals(ConsistencyType.RUW)) {
+			consistencyType = ConsistencyType.SEQUENTIAL;
+		}
 		
 		if(consistencyType.equals(ConsistencyType.QUORUM)) {
 			String temp = prop.getProperty(PropertiesConstants.NR);

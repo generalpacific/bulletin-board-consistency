@@ -13,6 +13,7 @@ import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.common.util.LogUtil;
+import edu.umn.bulletinboard.common.util.TimeUtil;
 import edu.umn.bulletinboard.server.coordinator.Coordinator;
 import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
 import edu.umn.bulletinboard.server.storage.MemStore;
@@ -52,6 +53,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     public int post(String article) throws RemoteException {
     	final String method = CLASS_NAME + ".post()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Post article: " + article);
+    	TimeUtil.delay();
         return serverImpl.post(article);
     }
 
@@ -59,6 +61,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     public String read() throws RemoteException {
     	final String method = CLASS_NAME + ".read()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Reading articles");
+    	TimeUtil.delay();
         return serverImpl.read();
     }
 
@@ -66,6 +69,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     public Article choose(int id) throws RemoteException {
     	final String method = CLASS_NAME + ".choose()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Choose for id: " + id);
+    	TimeUtil.delay();
         return serverImpl.choose(id);
     }
 
@@ -73,6 +77,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     public int reply(int id, Article reply) throws RemoteException {
     	final String method = CLASS_NAME + ".reply()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Reply : " + reply + " for id: " + id);
+    	TimeUtil.delay();
         return serverImpl.reply(id, reply);
     }
 
@@ -81,6 +86,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     	final String method = CLASS_NAME + ".readFromCoordinatingServer()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Reading from Coordinating server");
         try {
+        	TimeUtil.delay();
 			return coordServerImpl.readFromCoordinatingServer(type);
 		} catch (MalformedURLException e) {
 			LogUtil.log(method,"Got exception : " + e.getMessage());
@@ -96,6 +102,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Choosing from Coordinating server for id : " + id);
         try {
+        	TimeUtil.delay();
 			return coordServerImpl.chooseFromCoordinatingServer(id, type);
 		} catch (MalformedURLException e) {
 			LogUtil.log(method,"Got exception : " + e.getMessage());
@@ -111,6 +118,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Writing to Coordinating server " + articleText);
         try {
+        	TimeUtil.delay();
 			return coordServerImpl.writeToCoordinatingServer(articleText, type);
 		} catch (MalformedURLException e) {
 			LogUtil.log(method,"Got exception : " + e.getMessage());
@@ -129,6 +137,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
     	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Replying to: "+ articleId+" article : "+article+" in Coordinating server");
         try {
+        	TimeUtil.delay();
 			return coordServerImpl.replyToCoordinatingServer(articleId, article, type);
 		} catch (MalformedURLException e) {
 			LogUtil.log(method,"Got exception : " + e.getMessage());
@@ -144,11 +153,13 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
 
     @Override
     public int getNextArticleID() throws RemoteException {
+    	TimeUtil.delay();
         return coordServerImpl.getNextArticleID();
     }
 
     @Override
     public RegisterRet register(String ip, int port) throws RemoteException {
+    	TimeUtil.delay();
         return coordServerImpl.register(ip, port);
     }
 

@@ -21,6 +21,7 @@ import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.common.util.LogUtil;
+import edu.umn.bulletinboard.common.util.TimeUtil;
 import edu.umn.bulletinboard.server.BulletinBoardServiceImpl;
 import edu.umn.bulletinboard.server.Server;
 import edu.umn.bulletinboard.server.ServerConfig;
@@ -77,6 +78,7 @@ public class Coordinator {
         //see which is the max value, get all the values from that server and return them
         int latestUpdatedServerId = getLatestUpdatedServerId();
 		BulletinBoardService client = getClient(servers.get(latestUpdatedServerId), latestUpdatedServerId);
+		TimeUtil.delay();
         return client.readFromServer();
 	}
 
@@ -99,6 +101,7 @@ public class Coordinator {
 
             BulletinBoardService client = getClient(servers.get(servId),servId);
             if (client.getLatestArticleId() > max) {
+            	TimeUtil.delay();
                 max = client.getLatestArticleId();
                 maxServer = servId;
             }
@@ -147,6 +150,7 @@ public class Coordinator {
 
         //see which is the max value, get all the values from that server and return them
         BulletinBoardService client = getClient(servers.get(latestUpdatedServerId),latestUpdatedServerId);
+        TimeUtil.delay();
         return client.readFromServer(id);
 	}
 
@@ -159,8 +163,10 @@ public class Coordinator {
         	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Syncing to server: "  + i);
             BulletinBoardService client = getClient(servers.get(i),i);
             if (-1 == id) {
+            	TimeUtil.delay();
                 client.writeToServer(article);
             } else {
+            	TimeUtil.delay();
                 client.replyToServer(id, article);
             }
         }
@@ -215,8 +221,10 @@ public class Coordinator {
 
             BulletinBoardService client = getClient(servers.get(servId), servId);
             if (-1 == id) {
+            	TimeUtil.delay();
                 client.writeToServer(articleText);
             } else {
+            	TimeUtil.delay();
                 client.replyToServer(id, articleText);
             }
         }
@@ -294,7 +302,7 @@ public class Coordinator {
     }
     
     public synchronized  Set<ServerInfo> getServers() {
-    	return new HashSet(servers.values());
+    	return new HashSet<ServerInfo>(servers.values());
     }
     
     public Map<Integer, ServerInfo> getServerMap() {
