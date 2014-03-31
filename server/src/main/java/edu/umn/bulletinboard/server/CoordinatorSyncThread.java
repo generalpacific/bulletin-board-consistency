@@ -1,5 +1,6 @@
 package edu.umn.bulletinboard.server;
 
+import java.net.ConnectException;
 import java.rmi.Naming;
 import java.util.List;
 import java.util.Set;
@@ -33,15 +34,21 @@ public class CoordinatorSyncThread implements Callable<Boolean> {
 			if(i == Integer.MAX_VALUE) {
 				break;
 			}
-			LogUtil.log("CoordinatorSyncThread.call()", "Syncing ");
-			Set<ServerInfo> servers = Coordinator.getInstance().getServers();
-			List<Article> readFromCoordinatingServer = Coordinator.getInstance().readFromCoordinatingServer(ConsistencyType.QUORUM);
-			for (ServerInfo serverInfo : servers) {
-				LogUtil.log(method, "Syncing articles:" + readFromCoordinatingServer + " with server:" + serverInfo);
-				BulletinBoardService server = (BulletinBoardService) Naming.lookup("rmi://" + serverInfo.getIp()
-						+ ":" + serverInfo.getPort() + "/"
-						+ RMIConstants.BB_SERVICE);
-				server.sync(readFromCoordinatingServer);
+			try {
+				LogUtil.log("CoordinatorSyncThread.call()", "Syncing ");
+				Set<ServerInfo> servers = Coordinator.getInstance().getServers();
+				List<Article> readFromCoordinatingServer = Coordinator.getInstance().readFromCoordinatingServer(ConsistencyType.QUORUM);
+				for (ServerInfo serverInfo : servers) {
+					LogUtil.log(method, "Syncing articles:" + readFromCoordinatingServer + " with server:" + serverInfo);
+					BulletinBoardService server = (BulletinBoardService) Naming.lookup("rmi://" + serverInfo.getIp()
+							+ ":" + serverInfo.getPort() + "/"
+							+ RMIConstants.BB_SERVICE);
+					server.sync(readFromCoordinatingServer);
+				}
+			}catch(Exception ex) {
+				LogUtil.log(method, "Got exception : " + ex.getMessage());
+				LogUtil.log(method, "Details : ");
+				ex.printStackTrace();
 			}
 		}
 		return null;
