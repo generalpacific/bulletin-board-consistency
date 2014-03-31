@@ -159,7 +159,7 @@ public interface BulletinBoardService extends Remote {
 	 *  
 	 * @throws RemoteException
 	 */
-	public String readFromServer() throws RemoteException;
+	public List<Article> readFromServer() throws RemoteException;
 	
 	/**
 	 * Get the latest article id from the server.

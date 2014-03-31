@@ -84,7 +84,7 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
     @Override
     public void sync(List<Article> articles) throws RemoteException {
-    	coordServerImpl.sync(articles);
+    	serverImpl.sync(articles);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 	}
 
 	@Override
-	public String readFromServer() throws RemoteException {
+	public List<Article> readFromServer() throws RemoteException {
 		return serverImpl.readFromServer();
 	}
 }
