@@ -67,7 +67,7 @@ public class Coordinator {
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".readFromCoordinatingServer()";
-    	LogUtil.log(method, "Reading from coordinating server");
+    	LogUtil.log(method,"Server:"+  Server.getServerId() +  "Reading from coordinating server");
         //for quorum consistency only
         //TODO: pick up consistency level from properties file
         if (type != ConsistencyType.QUORUM) {
@@ -75,7 +75,8 @@ public class Coordinator {
         }
 
         //see which is the max value, get all the values from that server and return them
-        BulletinBoardService client = getClient(servers.get(getLatestUpdatedServerId()));
+        int latestUpdatedServerId = getLatestUpdatedServerId();
+		BulletinBoardService client = getClient(servers.get(latestUpdatedServerId), latestUpdatedServerId);
         return client.readFromServer();
 	}
 
@@ -96,7 +97,7 @@ public class Coordinator {
                 continue;
             }
 
-            BulletinBoardService client = getClient(servers.get(servId));
+            BulletinBoardService client = getClient(servers.get(servId),servId);
             if (client.getLatestArticleId() > max) {
                 max = client.getLatestArticleId();
                 maxServer = servId;
@@ -106,11 +107,11 @@ public class Coordinator {
         return maxServer;
     }
 
-    private BulletinBoardService getClient(ServerInfo sInfo) throws RemoteException
+    private BulletinBoardService getClient(ServerInfo sInfo, int serverId) throws RemoteException
             , NotBoundException, MalformedURLException {
 
         BulletinBoardService client = null;
-        if (99 == Server.getServerId()) {
+        if (99 == serverId) {
             client = BulletinBoardServiceImpl.getInstance();
         } else {
             client = (BulletinBoardService) Naming.lookup("rmi://"
@@ -133,17 +134,17 @@ public class Coordinator {
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
-    	LogUtil.log(method, "Choose from coordinating server for id : " + id);
+    	LogUtil.log(method, "Server:"+  Server.getServerId() + "Choose from coordinating server for id : " + id);
         //for quorum consistency only
         //TODO: pick up consistency level from properties file
         if (type != ConsistencyType.QUORUM) {
             throw new RemoteException("Not a quorum consistency");
         }
 
-        int maxServer = getLatestUpdatedServerId();
+        int latestUpdatedServerId = getLatestUpdatedServerId();
 
         //see which is the max value, get all the values from that server and return them
-        BulletinBoardService client = getClient(servers.get(getLatestUpdatedServerId()));
+        BulletinBoardService client = getClient(servers.get(latestUpdatedServerId),latestUpdatedServerId);
         return client.readFromServer(id);
 	}
 
@@ -151,10 +152,10 @@ public class Coordinator {
             , MalformedURLException {
     	
     	final String method = CLASS_NAME + ".syncAll()";
-    	LogUtil.log(method, "Syncing ALL : "  + id  + ":" + article);
+    	LogUtil.log(method, "Server:"+  Server.getServerId() + "Syncing ALL : "  + id  + ":" + article);
         for (int i : servers.keySet()) {
-        	LogUtil.log(method, "Syncing to server: "  + i);
-            BulletinBoardService client = getClient(servers.get(i));
+        	LogUtil.log(method, "Server:"+  Server.getServerId() + "Syncing to server: "  + i);
+            BulletinBoardService client = getClient(servers.get(i),i);
             if (-1 == id) {
                 client.writeToServer(article);
             } else {
@@ -174,7 +175,7 @@ public class Coordinator {
     public synchronized int writeToCoordinatingServer(Article articleText, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException, InvalidArticleException {
     	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
-    	LogUtil.log(method, "Writing " +  articleText + " to coordinating server");
+    	LogUtil.log(method,"Server:"+  Server.getServerId() +  "Writing " +  articleText + " to coordinating server");
         return writeReply(-1, articleText, type);
     }
 
@@ -182,7 +183,7 @@ public class Coordinator {
             throws RemoteException, InvalidArticleException, MalformedURLException
             , NotBoundException {
     	final String method = CLASS_NAME + ".writeReply()";
-    	LogUtil.log(method, "Writing "  + id + ":" + articleText);
+    	LogUtil.log(method, "Server:"+  Server.getServerId() + "Writing "  + id + ":" + articleText);
         if (! (type == ConsistencyType.QUORUM || type == ConsistencyType.SEQUENTIAL)) {
             throw new RemoteException("Not a quorum/sequential consistency");
         }
@@ -210,7 +211,7 @@ public class Coordinator {
                 continue;
             }
 
-            BulletinBoardService client = getClient(servers.get(servId));
+            BulletinBoardService client = getClient(servers.get(servId), servId);
             if (-1 == id) {
                 client.writeToServer(articleText);
             } else {
@@ -235,7 +236,7 @@ public class Coordinator {
             , ConsistencyType type) throws RemoteException, InvalidArticleException
             , NotBoundException, MalformedURLException {
     	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
-    	LogUtil.log(method, "Replying " + article + " to article id: " + articleId + " in coordinating server");
+    	LogUtil.log(method,"Server:"+  Server.getServerId() +  "Replying " + article + " to article id: " + articleId + " in coordinating server");
         return writeReply(articleId, article, type);
     }
 

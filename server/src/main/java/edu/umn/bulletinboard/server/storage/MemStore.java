@@ -35,9 +35,9 @@ public class MemStore {
 
             if (null == articleMap) {
                 memstoreInstance = new MemStore(new TreeMap<Integer, Article>());
+            }else {
+            	memstoreInstance = new MemStore(articleMap);
             }
-
-            memstoreInstance = new MemStore(articleMap);
         }
 
         return memstoreInstance;
