@@ -86,6 +86,7 @@ public class Coordinator {
             , MalformedURLException {
         Random random = new Random();
 
+        Set<Integer> alreadyRead = new HashSet<Integer>();
         int max = 0, maxServer = 0;
         for (int i = 0; i < getNR(); ++i) {
             int servId = random.nextInt(serverIdCounter + 2); //exclusive
@@ -94,10 +95,13 @@ public class Coordinator {
                 servId = 99;
             }
 
-            if (0 == servId || null == servers.get(servId)) {
+            if (0 == servId || null == servers.get(servId)
+                    || alreadyRead.contains(servId)) {
                 --i;
                 continue;
             }
+
+            alreadyRead.add(servId);
 
             BulletinBoardService client = getClient(servers.get(servId),servId);
             if (client.getLatestArticleId() > max) {
