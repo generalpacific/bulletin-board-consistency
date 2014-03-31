@@ -1,6 +1,7 @@
 package edu.umn.bulletinboard.server.storage;
 
 import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.util.IndentArticles;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -72,12 +73,13 @@ public class TestMemStore {
 
     @Test
     public void testTraversal() {
-        assertEquals("Mem Store traversal failed.", MemStore.getInstance()
-                .getArticlesStr(), (expectedStr()));
+        assertEquals("Mem Store traversal failed.", IndentArticles.getArticlesStr(
+                MemStore.getInstance().getAllArticles()), (expectedStr()));
 
         //to make sure, no internal data structures have changed / worked w/o side effects
         assertEquals("Mem Store traversal changed internal data " +
-                "structures.", MemStore.getInstance().getArticlesStr(), (expectedStr()));
+                "structures.", IndentArticles.getArticlesStr(MemStore.getInstance()
+                .getAllArticles()), (expectedStr()));
     }
 
     private String expectedStr() {
