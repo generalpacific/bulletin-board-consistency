@@ -28,6 +28,7 @@ public class ServerBulletinBoardServiceImpl {
 	    	final String method = CLASS_NAME + ".read()";
 	    	LogUtil.log(method, "Reading articles");
 	    	if(ServerConfig.getConsistencyType().equals(ConsistencyType.SEQUENTIAL)) {
+	    		LogUtil.log(method, "Returing articles str for memstore : " + MemStore.getInstance().getAllArticles().toString());
 	    		return IndentArticles.getArticlesStr(MemStore.getInstance().getAllArticles());
 	    	}
 	    	List<Article> readFromCoordinatingServer = Server.getCoodinatorServerRMIObjectHandle().readFromCoordinatingServer(ServerConfig.getConsistencyType());
