@@ -6,6 +6,7 @@ import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.storage.MemStore;
 import edu.umn.bulletinboard.common.util.IndentArticles;
+import edu.umn.bulletinboard.common.util.LogUtil;
 
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -34,11 +35,13 @@ public class ReadCmd extends BaseCommand {
         cli.setRead(true);
 
         if (cli.isRYWSet() && MemStore.getInstance().getAllArticles().size() > 0) {
+            LogUtil.log ("read()", "Retrieving articles from cache.");
             System.out.println(IndentArticles.getArticlesStr(MemStore.getInstance()
                     .getAllArticles()));
             return true;
         }
 
+        LogUtil.log ("read()", "Retrieving articles from server.");
         System.out.println(cli.getClient().read());
 
         return true;

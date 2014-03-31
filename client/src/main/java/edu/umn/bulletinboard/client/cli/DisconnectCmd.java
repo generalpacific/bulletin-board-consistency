@@ -4,6 +4,7 @@ import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.constants.CommandConstants;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.storage.MemStore;
+import edu.umn.bulletinboard.common.util.LogUtil;
 
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -27,6 +28,8 @@ public class DisconnectCmd extends BaseCommand {
             , ClientNullException, MalformedURLException, NotBoundException {
 
         Client cli = Client.getInstance();
+
+        LogUtil.log("disconnect()", "Disconnecting.");
 
         if (null == cli.getClient()) {
             throw new RemoteException(CommandConstants.ERR_CLIENT_NULL);

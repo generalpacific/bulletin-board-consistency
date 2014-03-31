@@ -37,11 +37,12 @@ public class PostCommand extends BaseCommand {
 
 
         int id = cli.getClient().post(getArgument(ARG_ARTICLE_TEXT));
-        System.out.println("New id: " + id);
+        LogUtil.log("post()", "New id posted: " + id);
 
         if (cli.isRYWSet()) {
             try {
                 MemStore.getInstance().addArticle(new Article(id, getArgument(ARG_ARTICLE_TEXT)));
+                LogUtil.log("post()", "Data posted inc cache.");
             } catch (InvalidArticleException e) {
                 throw new RemoteException(e.getMessage());
             }

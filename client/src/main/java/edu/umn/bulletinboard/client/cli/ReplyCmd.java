@@ -7,6 +7,7 @@ import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.exception.InvalidArticleException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.storage.MemStore;
+import edu.umn.bulletinboard.common.util.LogUtil;
 
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -42,12 +43,13 @@ public class ReplyCmd extends BaseCommand {
 
         int id = Client.getInstance().getClient().reply(pId
                 , new Article(-1, getArgument(ARG_ARTICLE_TEXT)));
-        System.out.println("New id: " + id);
+        LogUtil.log("post()", "New id posted: " + id);
 
         if (cli.isRYWSet()) {
             try {
                 MemStore.getInstance().getArticle(pId).addReplies(pId);
                 MemStore.getInstance().addArticle(new Article(id, getArgument(ARG_ARTICLE_TEXT)));
+                LogUtil.log("post()", "Data posted inc cache.");
             } catch (InvalidArticleException e) {
                 throw new RemoteException(e.getMessage());
             }

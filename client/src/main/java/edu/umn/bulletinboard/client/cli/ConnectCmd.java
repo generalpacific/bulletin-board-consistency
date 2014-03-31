@@ -48,7 +48,7 @@ public class ConnectCmd extends BaseCommand {
             //do nothing
         }
 
-        LogUtil.info("rmi://"
+        LogUtil.log("connect()", "rmi://"
                 + getArgument(ARG_HOST) + ":" + port + "/"
                 + RMIConstants.BB_SERVICE);
 
