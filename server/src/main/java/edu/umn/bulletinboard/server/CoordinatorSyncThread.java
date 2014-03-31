@@ -1,6 +1,5 @@
 package edu.umn.bulletinboard.server;
 
-import java.net.ConnectException;
 import java.rmi.Naming;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +15,7 @@ import edu.umn.bulletinboard.server.coordinator.Coordinator;
 
 public class CoordinatorSyncThread implements Callable<Boolean> {
 	
-	private final long WAIT_INTERVAL = 5 * 1000;
+	private final long WAIT_INTERVAL = 30 * 1000;
 	private final static String CLASS_NAME = CoordinatorSyncThread.class.getSimpleName();
 
 	@Override
