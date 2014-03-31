@@ -1,11 +1,8 @@
 package edu.umn.bulletinboard.server;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import edu.umn.bulletinboard.common.constants.PropertiesConstants;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
