@@ -1,6 +1,7 @@
 package edu.umn.bulletinboard.client.cli;
 
 import edu.umn.bulletinboard.client.Client;
+import edu.umn.bulletinboard.client.constants.CommandConstants;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.storage.MemStore;
@@ -29,6 +30,11 @@ public class ChooseCmd extends BaseCommand {
             , ClientNullException, MalformedURLException, NotBoundException {
 
         Client cli = Client.getInstance();
+
+        if (null == cli.getClient()) {
+            throw new RemoteException(CommandConstants.ERR_CLIENT_NULL);
+        }
+
         if (!cli.isReadSet()) {
             throw new RemoteException("Read should be called first.");
         }
