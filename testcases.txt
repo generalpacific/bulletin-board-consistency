@@ -80,3 +80,7 @@ Commands:
 6. Execute choose before read, should give error. For more explanation see design.txt.
 
 7. Test latest article id generation at coordinator by running two clients at the same time.
+
+8. Test invalid reply and choose. Reply and choose and invalid article id.
+
+9. 
