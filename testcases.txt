@@ -1,0 +1,67 @@
+Test cases:
+
+Sequential:
+  1. client - server
+  Execute few commands from client1 to server1
+  Execute read command on client2 which connects to server2
+
+  Commands:
+    client1:
+      connect 128.101.35.195
+      post article1
+      post article1
+      read
+      reply 1 article3
+      read
+      disconnect
+
+    client2:
+      connect 128.101.35.178
+      read
+      disconnect
+
+  All reads give latest values.
+	
+Quorum:
+  start 5 servers, 2 clients
+  Nw = 3, Nr = 3
+  
+  client 1:
+    connect 128.101.35.195
+    post article1
+    post article2
+    read
+    reply 2 article3
+    disconnect
+  
+  client 2:
+    connect 128.101.35.195
+    read
+	post article4
+	read
+    disconnect
+	
+  client 1:
+	connect 128.101.35.178
+	read
+	disconnect
+
+  All reads should show all the outputs. Writes should give more performance than sequential.
+  Reads should be expensive.
+	
+Read Your Write:
+  connect 128.101.35.195
+  post article1
+  post article2
+  read
+  disconnect
+  
+  connect 128.101.35.178
+  read
+  disconnect
+
+  The second read should take a lot of time as it is sent to server.
+  While first read is retrieved from cache, so faster read.
+
+  
+  

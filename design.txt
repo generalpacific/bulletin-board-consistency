@@ -72,7 +72,8 @@ Read Your Write Consistency:
  
   Write: Write operation writes the data to the server. It also maintains a cache. All the data that was
   written by the client is retrieved from the cache when read is called. This makes sure that the client 
-  always gets the articles that it has written previously. On exit all of the cache is cleared.
+  always gets the articles that it has written previously. On exit all of the cache is cleared. The strategy
+  currently uses primary-backup so writes are expensive but reads on same client are highly optimized.
   
   Read: A client will have a cache, so the data is returned locally from the client cache. This improves
   performance as no call is made to the server. However, as we do not clear the cache intermittently,
@@ -83,7 +84,7 @@ Read Your Write Consistency:
 Overall Notes, assumptions:
   -- Read call does not show trimmed output. It shows whole text of the article. This is a disadvantage
      as more data is transferred over the wire that degrades performance.
-  -- All server to server communication sleeps for random time ranging between 500 - 2000 ms. This is to
+  -- All server to server communication sleeps for random time ranging between 200 - 300 ms. This is to
      emulate wide-area networks.
   -- Currently all the articles are displayed on console in one go. No paged display is provided.
 
