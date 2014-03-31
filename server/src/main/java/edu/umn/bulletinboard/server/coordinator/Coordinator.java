@@ -81,6 +81,9 @@ public class Coordinator {
         synchronized (ServerLock.register) {
         	sInfo = servers.get(latestUpdatedServerId);
 		}
+        if(sInfo == null) {
+        	return new ArrayList<Article>();
+        }
 		BulletinBoardService client = getClient(sInfo, latestUpdatedServerId);
 		TimeUtil.delay();
         return client.readFromServer();
