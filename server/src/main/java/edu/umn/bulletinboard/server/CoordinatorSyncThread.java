@@ -28,6 +28,11 @@ public class CoordinatorSyncThread implements Callable<Boolean> {
 		
 		int i = 0;
 		while(true) {
+			Thread.sleep(WAIT_INTERVAL);
+			++i;
+			if(i == Integer.MAX_VALUE) {
+				break;
+			}
 			LogUtil.log("CoordinatorSyncThread.call()", "Syncing ");
 			Set<ServerInfo> servers = Coordinator.getInstance().getServers();
 			List<Article> readFromCoordinatingServer = Coordinator.getInstance().readFromCoordinatingServer(ConsistencyType.QUORUM);
@@ -37,11 +42,6 @@ public class CoordinatorSyncThread implements Callable<Boolean> {
 						+ ":" + serverInfo.getPort() + "/"
 						+ RMIConstants.BB_SERVICE);
 				server.sync(readFromCoordinatingServer);
-			}
-			Thread.sleep(WAIT_INTERVAL);
-			++i;
-			if(i == Integer.MAX_VALUE) {
-				break;
 			}
 		}
 		return null;
