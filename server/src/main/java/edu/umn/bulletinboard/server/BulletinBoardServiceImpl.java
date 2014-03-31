@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.content.RegisterRet;
+import edu.umn.bulletinboard.common.exception.IllegalIPException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
@@ -103,11 +104,22 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
     @Override
     public void addServer(int serverId) throws RemoteException {
-    	serverImpl.addServer(serverId);
+    	try {
+			serverImpl.addServer(serverId);
+		} catch (IllegalIPException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 	@Override
 	public List<ServerInfo> getRegisteredServers() throws RemoteException {
 		return coordServerImpl.getRegisteredServers();
+	}
+
+	@Override
+	public List<Article> readFromServer() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
