@@ -52,6 +52,10 @@ public class Client {
         return isRYW;
     }
 
+    public void setRYW(boolean RYW) {
+        this.isRYW = RYW;
+    }
+
 	private Client(){}
 
 	private Client(BulletinBoardService client) throws MalformedURLException,
@@ -160,6 +164,10 @@ public class Client {
 	public static void main(String[] args) {
 
 		try {
+
+            if (1 == args.length) {
+                Client.getInstance().setRYW(true);
+            }
 
 			Client.getInstance().startShell();
 
