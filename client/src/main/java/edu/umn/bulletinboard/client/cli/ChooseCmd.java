@@ -1,5 +1,6 @@
 package edu.umn.bulletinboard.client.cli;
 
+import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 
@@ -23,11 +24,11 @@ public class ChooseCmd extends BaseCommand {
     }
 
     @Override
-    public boolean execute(Remote client) throws NumberFormatException, RemoteException
+    public boolean execute() throws NumberFormatException, RemoteException
             , ClientNullException, MalformedURLException, NotBoundException {
 
         System.out.println(
-        ((BulletinBoardService) client).choose(Integer.parseInt(
+        Client.getInstance().getClient().choose(Integer.parseInt(
                 getArgument(ARG_ARTICLE_ID))));
 
         return true;

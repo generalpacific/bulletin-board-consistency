@@ -1,9 +1,11 @@
 package edu.umn.bulletinboard.client.cli;
 
+import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.constants.RMIConstants;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
+import edu.umn.bulletinboard.common.util.LogUtil;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -27,19 +29,34 @@ public class ConnectCmd extends BaseCommand {
     }
 
     @Override
-    public boolean execute(Remote client) throws NumberFormatException, RemoteException
+    public boolean execute() throws NumberFormatException, RemoteException
             , ClientNullException, MalformedURLException, NotBoundException {
 
-        startRMIClient(client);
+        startRMIClient();
 
         return true;
     }
 
-    private void startRMIClient(Remote client)
+    private void startRMIClient()
             throws MalformedURLException, RemoteException, NotBoundException {
-        client = (BulletinBoardService) Naming.lookup("rmi://"
-                + getArgument(ARG_HOST) + ":" + getArgument(ARG_HOST) + "/"
+
+        String port = "" + RMIConstants.RMI_DEFAULT_PORT;
+
+        try {
+            port = getArgument(ARG_PORT);
+        } catch (IllegalArgumentException e) {
+            //do nothing
+        }
+
+        LogUtil.info("rmi://"
+                + getArgument(ARG_HOST) + ":" + port + "/"
                 + RMIConstants.BB_SERVICE);
+
+        BulletinBoardService client = (BulletinBoardService) Naming.lookup("rmi://"
+                + getArgument(ARG_HOST) + ":" + port + "/"
+                + RMIConstants.BB_SERVICE);
+
+        Client.getInstance().setClient(client);
     }
 
 }

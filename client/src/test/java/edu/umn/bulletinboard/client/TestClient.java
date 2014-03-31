@@ -31,7 +31,7 @@ public class TestClient {
 	public void setUp() {
 		server = new MCServer();
 		try {
-			cli = new Client(server);
+			cli = Client.getInstance(server);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

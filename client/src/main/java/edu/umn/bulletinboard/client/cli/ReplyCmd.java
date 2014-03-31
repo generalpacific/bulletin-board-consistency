@@ -1,5 +1,6 @@
 package edu.umn.bulletinboard.client.cli;
 
+import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
@@ -25,11 +26,12 @@ public class ReplyCmd extends BaseCommand {
     }
 
     @Override
-    public boolean execute(Remote client) throws NumberFormatException, RemoteException
+    public boolean execute() throws NumberFormatException, RemoteException
             , ClientNullException, MalformedURLException, NotBoundException {
 
-        ((BulletinBoardService)client).reply(Integer.parseInt(getArgument(ARG_ID))
-                , new Article(-1, getArgument(ARG_ARTICLE_TEXT)));
+        System.out.println("New id: " +
+        Client.getInstance().getClient().reply(Integer.parseInt(getArgument(ARG_ID))
+                , new Article(-1, getArgument(ARG_ARTICLE_TEXT))));
 
         return true;
     }

@@ -1,5 +1,6 @@
 package edu.umn.bulletinboard.client.cli;
 
+import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 
@@ -18,10 +19,11 @@ public class ReadCmd extends BaseCommand {
     }
 
     @Override
-    public boolean execute(Remote client) throws NumberFormatException, RemoteException, ClientNullException, MalformedURLException, NotBoundException {
+    public boolean execute() throws NumberFormatException, RemoteException, ClientNullException, MalformedURLException, NotBoundException {
 
-        System.out.println(((BulletinBoardService) client).read());
+        System.out.println(
+                Client.getInstance().getClient().read());
 
-        return false;
+        return true;
     }
 }

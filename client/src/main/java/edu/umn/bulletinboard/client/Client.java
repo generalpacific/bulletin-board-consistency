@@ -29,18 +29,45 @@ import edu.umn.bulletinboard.common.util.LogUtil;
 public class Client {
 
 	private static final String CMD_PROMPT = "\nBulletinBoard-Client-1.0$ ";
-	private static final String GOOD_BYE_MSG = "Good Bye! Press Ctrl-C to exit.";
+	private static final String GOOD_BYE_MSG = "Good Bye!";
 
 	private static final String USAGE_HELP = "arguments: <rmi_server_host> <rmi_server_port>";
 
-	private Remote client;
+	private BulletinBoardService client;
 
-	public Client(){}
+    private static Client instance = null;
 
-	public Client(Remote client) throws MalformedURLException,
+	private Client(){}
+
+	private Client(BulletinBoardService client) throws MalformedURLException,
 			RemoteException, NotBoundException {
 		this.client = client;
 	}
+
+    public synchronized static Client getInstance() {
+        if (null == instance) {
+            instance = new Client();
+        }
+
+        return instance;
+    }
+
+    public synchronized static Client getInstance(BulletinBoardService client) throws RemoteException
+            , NotBoundException, MalformedURLException {
+        if (null == instance) {
+            instance = new Client(client);
+        }
+
+        return instance;
+    }
+
+    public void setClient(BulletinBoardService cli) {
+        this.client = cli;
+    }
+
+    public BulletinBoardService getClient() {
+        return client;
+    }
 
 	void executeCmd(String cmdStr) throws NumberFormatException,
 			ClientNullException {
@@ -49,7 +76,7 @@ public class Client {
 		try {
 			cmd = CommandFactory.getCommand(cmdStr);
 
-			if (!cmd.execute(client)) {
+			if (!cmd.execute()) {
 				LogUtil.info(CommandConstants.ERR_COMMAND_EXEC_FAILED);
 			}
 		} catch (IllegalCommandException e) {
@@ -96,6 +123,8 @@ public class Client {
 				}
 
 				executeCmd(cmd);
+
+                System.out.print(CMD_PROMPT);
 			}
 
 			System.out.print(CMD_PROMPT);
@@ -117,7 +146,7 @@ public class Client {
 
 		try {
 
-			new Client().startShell();
+			Client.getInstance().startShell();
 
 		} catch (RemoteException e) {
 			LogUtil.catchedRemoteException(e);
