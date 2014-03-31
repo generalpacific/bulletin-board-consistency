@@ -19,7 +19,6 @@ public class IndentArticles {
      */
     public static String getArticlesStr(Map<Integer, Article> articles) {
 
-        Map<Integer, Boolean> isVisited = new HashMap<Integer, Boolean>();
         StringBuffer str = new StringBuffer();
 
         Set<Integer> ids = articles.keySet();
@@ -32,7 +31,6 @@ public class IndentArticles {
             }
 
             stk.addFirst(new StkNode(id, 1));
-            int indent = 0;
             while (!stk.isEmpty()) {
                 StkNode top = stk.removeFirst();
 
@@ -85,13 +83,6 @@ class StkNode {
     }
 
     private int level;
-
-    private String indentArticle(int level, String article) {
-
-        StringBuffer buf = new StringBuffer();
-
-        return null;
-    }
 
     public StkNode(int id, int level) {
         this.id = id;
