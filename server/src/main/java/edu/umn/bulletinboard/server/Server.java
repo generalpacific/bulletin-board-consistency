@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
+import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
@@ -59,7 +60,8 @@ public class Server {
 		serverRMIPort = Integer.parseInt(args[1]);
 		
 		ServerConfig.loadProperties(args[2]);
-		
+
+		System.setProperty("java.rmi.server.hostname", serverIp);
 		LogUtil.log(method, "Getting the CoordinatorServerRMIObject on " + ServerConfig.getCoordinatingServerIp() 
 				+ ":" + ServerConfig.getCoordinatingServerRMIPort()); 
 		try {
@@ -67,6 +69,9 @@ public class Server {
 				coordinatorServerRMIObjectHandle = (BulletinBoardService) Naming.lookup("rmi://" + ServerConfig.getCoordinatingServerIp()
 					+ ":" + ServerConfig.getCoordinatingServerRMIPort() + "/"
 					+ RMIConstants.BB_SERVICE);
+				LogUtil.log(method, "writing article abc");
+				coordinatorServerRMIObjectHandle.writeToCoordinatingServer(new Article(-1,"abc"), ServerConfig.getConsistencyType());
+				LogUtil.log(method, "DONE writing article abc");
 			}else{
 				coordinatorServerRMIObjectHandle = BulletinBoardServiceImpl.getInstance();
 			}
@@ -110,7 +115,6 @@ public class Server {
 		LogUtil.log(method, "DONE Registering to the coordinating server");*/
 		
 		LogUtil.log(method, "Starting server on " + serverIp + ":" + serverRMIPort);
-		System.setProperty("java.rmi.server.hostname", serverIp);
 		LogUtil.log(method, "Binding " + RMIConstants.BB_SERVICE);
 		// Bind the PubSubService RMI Registry
 		try {

@@ -46,7 +46,7 @@ public class ServerBulletinBoardServiceImpl {
 	    public synchronized int reply(int id, Article reply) throws RemoteException {
 	    	final String method = CLASS_NAME + ".reply()";
 	    	LogUtil.log(method, "Reply : " + reply + " for id : "+ id);
-	        return Server.getCoodinatorServerRMIObjectHandle().reply(id, reply);
+	        return Server.getCoodinatorServerRMIObjectHandle().replyToCoordinatingServer(id, reply, ServerConfig.getConsistencyType());
 	    }
 	    
 	    public synchronized void writeToServer(int articleId, String articleText) throws RemoteException {
