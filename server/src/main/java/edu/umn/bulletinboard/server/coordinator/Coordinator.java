@@ -3,9 +3,14 @@ package edu.umn.bulletinboard.server.coordinator;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
 import edu.umn.bulletinboard.common.content.Article;
@@ -15,13 +20,11 @@ import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
-import edu.umn.bulletinboard.common.util.IndentArticles;
 import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.server.BulletinBoardServiceImpl;
 import edu.umn.bulletinboard.server.Server;
 import edu.umn.bulletinboard.server.ServerConfig;
 import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
-import edu.umn.bulletinboard.server.storage.MemStore;
 
 /**
  * @author abhijeet
@@ -35,6 +38,7 @@ import edu.umn.bulletinboard.server.storage.MemStore;
  */
 public class Coordinator {
 
+	private static final String CLASS_NAME = Coordinator.class.getSimpleName();
     //This is an assumption that number of articles cannot be more than
     //Max value of integer in Java
 	int counter, serverIdCounter;
@@ -62,6 +66,8 @@ public class Coordinator {
 	public synchronized List<Article> readFromCoordinatingServer(ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException {
 
+		final String method = CLASS_NAME + ".readFromCoordinatingServer()";
+    	LogUtil.log(method, "Reading from coordinating server");
         //for quorum consistency only
         //TODO: pick up consistency level from properties file
         if (type != ConsistencyType.QUORUM) {
@@ -126,6 +132,8 @@ public class Coordinator {
 	public synchronized Article chooseFromCoordinatingServer(int id, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException {
 
+		final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
+    	LogUtil.log(method, "Choose from coordinating server for id : " + id);
         //for quorum consistency only
         //TODO: pick up consistency level from properties file
         if (type != ConsistencyType.QUORUM) {
@@ -162,6 +170,8 @@ public class Coordinator {
      */
     public synchronized int writeToCoordinatingServer(Article articleText, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException, InvalidArticleException {
+    	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
+    	LogUtil.log(method, "Writing " +  articleText + " to coordinating server");
         return writeReply(-1, articleText, type);
     }
 
@@ -219,6 +229,8 @@ public class Coordinator {
     public synchronized int replyToCoordinatingServer(int articleId, Article article
             , ConsistencyType type) throws RemoteException, InvalidArticleException
             , NotBoundException, MalformedURLException {
+    	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
+    	LogUtil.log(method, "Replying " + article + " to article id: " + articleId + " in coordinating server");
         return writeReply(articleId, article, type);
     }
 

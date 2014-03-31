@@ -35,6 +35,8 @@ public class ServerBulletinBoardServiceImpl {
 	    }
 
 	    public synchronized Article choose(int id) throws RemoteException {
+	    	final String method = CLASS_NAME + ".read()";
+	    	LogUtil.log(method, "Choose for id : " + id);
 	    	if(ServerConfig.getConsistencyType().equals(ConsistencyType.SEQUENTIAL)) {
 	    		return MemStore.getInstance().getArticle(id);
 	    	}
@@ -42,10 +44,14 @@ public class ServerBulletinBoardServiceImpl {
 	    }
 
 	    public synchronized int reply(int id, Article reply) throws RemoteException {
+	    	final String method = CLASS_NAME + ".reply()";
+	    	LogUtil.log(method, "Reply : " + reply + " for id : "+ id);
 	        return Server.getCoodinatorServerRMIObjectHandle().reply(id, reply);
 	    }
 	    
 	    public synchronized void writeToServer(int articleId, String articleText) throws RemoteException {
+	    	final String method = CLASS_NAME + ".writeToServer()";
+	    	LogUtil.log(method, "Writing " + articleId + ":" + articleText + " to current server");
 	    	try {
 				MemStore.getInstance().addArticle(new Article(articleId, articleText));
 			} catch (InvalidArticleException e) {
@@ -54,6 +60,8 @@ public class ServerBulletinBoardServiceImpl {
 	    }
 
 	    public synchronized Article readFromServer(int articleId) throws RemoteException {
+	    	final String method = CLASS_NAME + ".readFromServer()";
+	    	LogUtil.log(method, "Reading " + articleId + " from server");
 	        return MemStore.getInstance().getArticle(articleId);
 	    }
 
@@ -75,6 +83,8 @@ public class ServerBulletinBoardServiceImpl {
 	    }
 
 		public synchronized List<Article> readFromServer() {
+			final String method = CLASS_NAME + ".readFromServer()";
+	    	LogUtil.log(method, "Reading all articles from server");
 			return new ArrayList(MemStore.getInstance().getAllArticles().values());
 		}
 

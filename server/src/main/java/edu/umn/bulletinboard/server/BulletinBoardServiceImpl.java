@@ -6,14 +6,13 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
-import com.sun.org.apache.xml.internal.utils.SerializableLocatorImpl;
-
 import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.exception.IllegalIPException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
+import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.server.coordinator.Coordinator;
 import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
 
@@ -24,6 +23,8 @@ import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
  */
 public class BulletinBoardServiceImpl extends UnicastRemoteObject implements BulletinBoardService{
 
+	private static final String CLASS_NAME = BulletinBoardServiceImpl.class.getSimpleName();
+	
 	private static final long serialVersionUID = -5647882858583434862L;
 	
 	private static BulletinBoardServiceImpl bb = null;
@@ -48,68 +49,90 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
 
     @Override
     public int post(String article) throws RemoteException {
+    	final String method = CLASS_NAME + ".post()";
+    	LogUtil.log(method, "Post article: " + article);
         return serverImpl.post(article);
     }
 
     @Override
     public String read() throws RemoteException {
+    	final String method = CLASS_NAME + ".read()";
+    	LogUtil.log(method, "Reading articles");
         return serverImpl.read();
     }
 
     @Override
     public Article choose(int id) throws RemoteException {
+    	final String method = CLASS_NAME + ".choose()";
+    	LogUtil.log(method, "Choose for id: " + id);
         return serverImpl.choose(id);
     }
 
     @Override
     public int reply(int id, Article reply) throws RemoteException {
+    	final String method = CLASS_NAME + ".reply()";
+    	LogUtil.log(method, "Reply : " + reply + " for id: " + id);
         return serverImpl.reply(id, reply);
     }
 
     @Override
     public List<Article> readFromCoordinatingServer(ConsistencyType type) throws RemoteException {
+    	final String method = CLASS_NAME + ".readFromCoordinatingServer()";
         try {
 			return coordServerImpl.readFromCoordinatingServer(type);
 		} catch (MalformedURLException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		} catch (NotBoundException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		}
     }
 
     @Override
     public Article chooseFromCoordinatingServer(int id, ConsistencyType type) throws RemoteException {
+    	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
         try {
 			return coordServerImpl.chooseFromCoordinatingServer(id, type);
 		} catch (MalformedURLException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		} catch (NotBoundException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		}
     }
 
     @Override
     public int writeToCoordinatingServer(Article articleText, ConsistencyType type) throws RemoteException {
+    	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
         try {
 			return coordServerImpl.writeToCoordinatingServer(articleText, type);
 		} catch (MalformedURLException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		} catch (NotBoundException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		} catch (InvalidArticleException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		}
     }
 
     @Override
     public int replyToCoordinatingServer(int articleId, Article article, ConsistencyType type) throws RemoteException {
+    	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
         try {
 			return coordServerImpl.replyToCoordinatingServer(articleId, article, type);
 		} catch (MalformedURLException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		} catch (InvalidArticleException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		} catch (NotBoundException e) {
+			LogUtil.log(method,"Got exception : " + e.getMessage());
 			throw new RemoteException("Got exception in connection to other servers.",e);
 		}
     }
