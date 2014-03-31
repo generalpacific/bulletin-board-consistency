@@ -90,7 +90,7 @@ public class Coordinator {
             , MalformedURLException {
         Random random = new Random();
 
-        Set<Integer> alreadyRead = new HashSet<Integer>();
+        List<Integer> alreadyRead = new ArrayList<Integer>();
         int max = 0, maxServer = 0;
         for (int i = 0; i < getNR(); ++i) {
             int servId = random.nextInt(serverIdCounter + 2); //exclusive
@@ -233,7 +233,7 @@ public class Coordinator {
         //quorum consistency
         //add the article
 
-        Set<Integer> alreadySent = new HashSet<Integer>();
+        List<Integer> alreadySent = new ArrayList<Integer>();
         Random random = new Random();
         for (int i = 0; i < getNW(); ++i) {
             int servId = random.nextInt(serverIdCounter + 2); //exclusive
