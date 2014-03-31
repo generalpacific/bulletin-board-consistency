@@ -2,6 +2,7 @@ package edu.umn.bulletinboard.common.rmi;
 
 import edu.umn.bulletinboard.common.server.ServerInfo;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * Created by Abhijeet on 3/30/2014.
  */
-public class RegisterRet extends UnicastRemoteObject{
+public class RegisterRet implements Serializable{
 
     /**
 	 * 
