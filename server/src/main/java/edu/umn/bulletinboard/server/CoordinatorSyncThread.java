@@ -1,7 +1,6 @@
 package edu.umn.bulletinboard.server;
 
 import java.rmi.Naming;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;

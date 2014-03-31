@@ -1,12 +1,11 @@
 package edu.umn.bulletinboard.common.rmi;
 
-import edu.umn.bulletinboard.common.server.ServerInfo;
-
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.umn.bulletinboard.common.server.ServerInfo;
 
 /**
  *

@@ -3,6 +3,10 @@ package edu.umn.bulletinboard.common.util;
 import java.util.Random;
 
 public final class TimeUtil {
+	
+	private static final int LOWER_LIMIT = 200;
+	private static final int UPPER_LIMIT = 500;
+	
 	private TimeUtil() {
 		throw new IllegalStateException("Util class cannot be instantiated.");
 	}
@@ -12,7 +16,7 @@ public final class TimeUtil {
 	 * @return
 	 */
 	public static long getDelay() {
-		return (long)(new Random().nextInt(1500) + 500);
+		return (long)(new Random().nextInt(UPPER_LIMIT - LOWER_LIMIT) + LOWER_LIMIT);
 	}
 	
 	public static void delay() {

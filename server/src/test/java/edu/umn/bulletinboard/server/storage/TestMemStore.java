@@ -1,15 +1,15 @@
 package edu.umn.bulletinboard.server.storage;
 
-import edu.umn.bulletinboard.common.content.Article;
-import edu.umn.bulletinboard.common.util.IndentArticles;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
+import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.util.IndentArticles;
 
 /**
  *

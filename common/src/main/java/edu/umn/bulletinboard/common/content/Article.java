@@ -2,7 +2,6 @@ package edu.umn.bulletinboard.common.content;
 
 
 import java.io.Serializable;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +41,6 @@ public class Article implements Serializable{
 
     private boolean visited;
 	
-	private static final int MIN_TXT_LEN = 10;
-
     public Article(int id, String text) {
         this.id = id;
         this.text = text;
