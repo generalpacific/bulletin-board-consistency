@@ -78,15 +78,7 @@ public class ServerBulletinBoardServiceImpl {
 	    }
 
 	    public  int getLatestArticleId() throws RemoteException {
-	        Map<Integer, Article> allArticles = MemStore.getInstance().getAllArticles();
-	        Set<Integer> keySet = allArticles.keySet();
-	        int max = -1;
-	        for (Integer integer : keySet) {
-				if(integer > max) {
-					max = integer;
-				}
-			}
-	        return max;
+	        return MemStore.getInstance().getAllArticles().size();
 	    }
 
 	    public  void addServer(int serverId) throws RemoteException, IllegalIPException {
