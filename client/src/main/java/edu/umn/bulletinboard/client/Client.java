@@ -37,6 +37,21 @@ public class Client {
 
     private static Client instance = null;
 
+    private boolean isRead = false;
+    private boolean isRYW = false;
+
+    public void setRead(boolean iR) {
+        this.isRead = iR;
+    }
+
+    public boolean isReadSet() {
+        return isRead;
+    }
+
+    public boolean isRYWSet() {
+        return isRYW;
+    }
+
 	private Client(){}
 
 	private Client(BulletinBoardService client) throws MalformedURLException,
