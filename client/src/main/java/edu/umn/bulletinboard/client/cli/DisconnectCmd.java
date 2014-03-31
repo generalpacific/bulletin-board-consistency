@@ -34,7 +34,6 @@ public class DisconnectCmd extends BaseCommand {
 
         cli.setClient(null);
         cli.setRead(false);
-        MemStore.getInstance().getAllArticles().clear();
         return true;
     }
 }
