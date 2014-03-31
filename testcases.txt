@@ -1,3 +1,7 @@
+Authors:
+Abhijeet Gaikwad
+Prashant Chaudhary
+
 Test cases:
 
 1. Sequential:
@@ -83,4 +87,6 @@ Commands:
 
 8. Test invalid reply and choose. Reply and choose and invalid article id.
 
-9. 
+9. execute operations without connecting to server, i.e., without calling connect first.
+
+10. 

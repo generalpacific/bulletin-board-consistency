@@ -91,6 +91,11 @@ public class Coordinator {
 
     private int getLatestUpdatedServerId() throws RemoteException, NotBoundException
             , MalformedURLException {
+
+        if (getNR() + getNW() <= servers.size() || getNW() < (servers.size()/2) + 1) {
+            throw new RemoteException("Invalid read and write quorum.");
+        }
+
         Random random = new Random();
 
         List<Integer> alreadyRead = new ArrayList<Integer>();
