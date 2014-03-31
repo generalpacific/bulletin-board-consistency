@@ -9,10 +9,10 @@ import java.util.*;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
 import edu.umn.bulletinboard.common.content.Article;
-import edu.umn.bulletinboard.common.content.RegisterRet;
 import edu.umn.bulletinboard.common.exception.IllegalIPException;
 import edu.umn.bulletinboard.common.locks.ServerLock;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.common.util.IndentArticles;

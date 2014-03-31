@@ -1,6 +1,8 @@
 package edu.umn.bulletinboard.common.content;
 
 
+import java.io.Serializable;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +12,11 @@ import java.util.List;
  * @author Abhijeet
  *
  */
-public class Article {
+public class Article implements Serializable{
 
-    /**
+	private static final long serialVersionUID = -6260111177721912702L;
+
+	/**
      * Unique id of the article. Assumption that number of articles will never be
      * greater than int max.
      */

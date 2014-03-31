@@ -3,12 +3,15 @@ package edu.umn.bulletinboard.server;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+import com.sun.org.apache.xml.internal.utils.SerializableLocatorImpl;
+
 import edu.umn.bulletinboard.common.content.Article;
-import edu.umn.bulletinboard.common.content.RegisterRet;
 import edu.umn.bulletinboard.common.exception.IllegalIPException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.server.coordinator.Coordinator;
@@ -19,18 +22,26 @@ import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
  *
  *
  */
-public class BulletinBoardServiceImpl implements BulletinBoardService{
+public class BulletinBoardServiceImpl extends UnicastRemoteObject implements BulletinBoardService{
 
-    private static BulletinBoardServiceImpl bb = null;
+	private static final long serialVersionUID = -5647882858583434862L;
+	
+	private static BulletinBoardServiceImpl bb = null;
     private final ServerBulletinBoardServiceImpl serverImpl = new ServerBulletinBoardServiceImpl();
     private final Coordinator coordServerImpl = Coordinator.getInstance();
 
-    private BulletinBoardServiceImpl() {
+    private BulletinBoardServiceImpl() throws RemoteException
+    {
     }
 
     public synchronized static BulletinBoardServiceImpl getInstance() {
         if (null == bb) {
-            bb = new BulletinBoardServiceImpl();
+            try {
+				bb = new BulletinBoardServiceImpl();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         return bb;
     }

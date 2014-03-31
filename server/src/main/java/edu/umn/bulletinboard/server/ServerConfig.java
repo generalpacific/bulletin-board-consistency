@@ -1,5 +1,7 @@
 package edu.umn.bulletinboard.server;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -32,9 +34,16 @@ public class ServerConfig {
 	
 	public static void loadProperties(String filename) {
 		final String method = CLASS_NAME + ".loadProperties()"; 
-		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+		//InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("./" + filename);
+		InputStream input = null;
+		try {
+			input = new FileInputStream(filename);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		if(input == null){
-	        LogUtil.log(method,"Sorry, unable to find " + "config.properties" + ". Exiting.");
+	        LogUtil.log(method,"Sorry, unable to find " + filename + ". Exiting.");
 		    System.exit(1);
 		}
 		Properties prop = new Properties();
