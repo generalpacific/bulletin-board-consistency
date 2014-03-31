@@ -43,7 +43,7 @@ public class MemStore {
         return memstoreInstance;
     }
 
-    public void addArticle(Article article) throws InvalidArticleException {
+    public synchronized void addArticle(Article article) throws InvalidArticleException {
         if (null == article || article.getId() < 0) {
             throw new InvalidArticleException("Memstore cannot store invalid article");
         }
@@ -51,11 +51,11 @@ public class MemStore {
         articles.put(article.getId(), article);
     }
 
-    public Article getArticle(int id) {
+    public synchronized Article getArticle(int id) {
         return articles.get(id);
     }
 
-    public Map<Integer, Article> getAllArticles() {
+    public synchronized Map<Integer, Article> getAllArticles() {
         return articles;
     }
 

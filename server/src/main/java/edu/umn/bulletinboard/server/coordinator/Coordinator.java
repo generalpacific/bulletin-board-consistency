@@ -48,7 +48,7 @@ public class Coordinator {
 
     private Coordinator() {}
 
-    public synchronized static Coordinator getInstance() {
+    public synchronized  static Coordinator getInstance() {
         if (null == instance) {
             instance = new Coordinator();
         }
@@ -63,7 +63,7 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-	public synchronized List<Article> readFromCoordinatingServer(ConsistencyType type)
+	public synchronized  List<Article> readFromCoordinatingServer(ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".readFromCoordinatingServer()";
@@ -80,7 +80,7 @@ public class Coordinator {
         return client.readFromServer();
 	}
 
-    private int getLatestUpdatedServerId() throws RemoteException, NotBoundException
+    private synchronized int getLatestUpdatedServerId() throws RemoteException, NotBoundException
             , MalformedURLException {
         Random random = new Random();
 
@@ -132,7 +132,7 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-	public synchronized Article chooseFromCoordinatingServer(int id, ConsistencyType type)
+	public synchronized  Article chooseFromCoordinatingServer(int id, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
@@ -150,7 +150,7 @@ public class Coordinator {
         return client.readFromServer(id);
 	}
 
-    private void syncAll(int id, Article article) throws RemoteException, NotBoundException
+    private synchronized void syncAll(int id, Article article) throws RemoteException, NotBoundException
             , MalformedURLException {
     	
     	final String method = CLASS_NAME + ".syncAll()";
@@ -174,14 +174,14 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-    public synchronized int writeToCoordinatingServer(Article articleText, ConsistencyType type)
+    public synchronized  int writeToCoordinatingServer(Article articleText, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException, InvalidArticleException {
     	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
     	LogUtil.log(method,"Server:"+  Server.getServerId() + " "+  "Writing " +  articleText + " to coordinating server");
         return writeReply(-1, articleText, type);
     }
 
-    private int writeReply(int id, Article articleText, ConsistencyType type)
+    private synchronized  int writeReply(int id, Article articleText, ConsistencyType type)
             throws RemoteException, InvalidArticleException, MalformedURLException
             , NotBoundException {
     	final String method = CLASS_NAME + ".writeReply()";
@@ -234,7 +234,7 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-    public synchronized int replyToCoordinatingServer(int articleId, Article article
+    public synchronized  int replyToCoordinatingServer(int articleId, Article article
             , ConsistencyType type) throws RemoteException, InvalidArticleException
             , NotBoundException, MalformedURLException {
     	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
@@ -248,9 +248,9 @@ public class Coordinator {
      * @return article id
      * @throws RemoteException
      */
-	public synchronized int getNextArticleID() throws RemoteException {
+	public synchronized  int getNextArticleID() throws RemoteException {
 
-        // this should be synchronized as a lot of Servers will simultaneously
+        // this should be  as a lot of Servers will simultaneously
         // call this method.
         synchronized (ServerLock.getID) {
             return ++counter;
@@ -264,11 +264,11 @@ public class Coordinator {
      * @return server id
      * @throws RemoteException
      */
-    public synchronized RegisterRet register(String ip, int port) throws RemoteException {
+    public synchronized   RegisterRet register(String ip, int port) throws RemoteException {
 
         RegisterRet ret = null;
 
-        synchronized (ServerLock.register) {
+         synchronized (ServerLock.register) {
             ++serverIdCounter;
             try {
                 servers.put(serverIdCounter, new ServerInfo(ip, port));
@@ -293,7 +293,7 @@ public class Coordinator {
         return ServerConfig.getNW();
     }
     
-    public Set<ServerInfo> getServers() {
+    public synchronized  Set<ServerInfo> getServers() {
     	return new HashSet(servers.values());
     }
     

@@ -18,13 +18,13 @@ import edu.umn.bulletinboard.server.storage.MemStore;
 public class ServerBulletinBoardServiceImpl {
 		private static final String CLASS_NAME = ServerBulletinBoardServiceImpl.class.getSimpleName();
 	    
-		public synchronized int post(String article) throws RemoteException {
+		public  int post(String article) throws RemoteException {
 			final String method = CLASS_NAME + ".post()";
 			LogUtil.log(method, "Server:"+  Server.getServerId() + " " +  " Posting " + article );
 	        return Server.getCoodinatorServerRMIObjectHandle().writeToCoordinatingServer(new Article(-1, article) ,ServerConfig.getConsistencyType()) ;
 	    }
 
-	    public synchronized String read() throws RemoteException {
+	    public  String read() throws RemoteException {
 	    	final String method = CLASS_NAME + ".read()";
 	    	LogUtil.log(method, "Server:"+  Server.getServerId() + " " +  "Reading articles");
 	    	if(ServerConfig.getConsistencyType().equals(ConsistencyType.SEQUENTIAL)) {
@@ -35,7 +35,7 @@ public class ServerBulletinBoardServiceImpl {
 	        return IndentArticles.getArticlesStr(IndentArticles.getArticleMap(readFromCoordinatingServer));
 	    }
 
-	    public synchronized Article choose(int id) throws RemoteException {
+	    public  Article choose(int id) throws RemoteException {
 	    	final String method = CLASS_NAME + ".read()";
 	    	LogUtil.log(method, "Server:"+  Server.getServerId() + " " +   "Choose for id : " + id);
 	    	if(ServerConfig.getConsistencyType().equals(ConsistencyType.SEQUENTIAL)) {
@@ -44,13 +44,13 @@ public class ServerBulletinBoardServiceImpl {
 	    	return Server.getCoodinatorServerRMIObjectHandle().chooseFromCoordinatingServer(id, ServerConfig.getConsistencyType());
 	    }
 
-	    public synchronized int reply(int id, Article reply) throws RemoteException {
+	    public  int reply(int id, Article reply) throws RemoteException {
 	    	final String method = CLASS_NAME + ".reply()";
 	    	LogUtil.log(method, "Server:"+  Server.getServerId() + " " +  "Reply : " + reply + " for id : "+ id);
 	        return Server.getCoodinatorServerRMIObjectHandle().replyToCoordinatingServer(id, reply, ServerConfig.getConsistencyType());
 	    }
 	    
-	    public synchronized void writeToServer(int articleId, String articleText) throws RemoteException {
+	    public  void writeToServer(int articleId, String articleText) throws RemoteException {
 	    	final String method = CLASS_NAME + ".writeToServer()";
 	    	LogUtil.log(method, "Server:"+  Server.getServerId() + " " +  "Writing " + articleId + ":" + articleText + " to current server");
 	    	try {
@@ -61,13 +61,13 @@ public class ServerBulletinBoardServiceImpl {
 	    	LogUtil.log(method,"Server:"+  Server.getServerId() + " " +   "Updated memstore after write : " + MemStore.getInstance().getAllArticles().toString());
 	    }
 
-	    public synchronized Article readFromServer(int articleId) throws RemoteException {
+	    public  Article readFromServer(int articleId) throws RemoteException {
 	    	final String method = CLASS_NAME + ".readFromServer()";
 	    	LogUtil.log(method,"Server:"+  Server.getServerId() + " " +   "Reading " + articleId + " from server");
 	        return MemStore.getInstance().getArticle(articleId);
 	    }
 
-	    public synchronized int getLatestArticleId() throws RemoteException {
+	    public  int getLatestArticleId() throws RemoteException {
 	        Map<Integer, Article> allArticles = MemStore.getInstance().getAllArticles();
 	        Set<Integer> keySet = allArticles.keySet();
 	        int max = -1;
@@ -79,18 +79,18 @@ public class ServerBulletinBoardServiceImpl {
 	        return max;
 	    }
 
-	    public synchronized void addServer(int serverId) throws RemoteException, IllegalIPException {
+	    public  void addServer(int serverId) throws RemoteException, IllegalIPException {
 	    	// TODO
 	    	Server.getServers().add(new ServerInfo(serverId, null,  1));
 	    }
 
-		public synchronized List<Article> readFromServer() {
+		public  List<Article> readFromServer() {
 			final String method = CLASS_NAME + ".readFromServer()";
 	    	LogUtil.log(method, "Server:"+  Server.getServerId() + " " +  "Reading all articles from server");
 			return new ArrayList(MemStore.getInstance().getAllArticles().values());
 		}
 
-		public synchronized void sync(List<Article> articles) {
+		public  void sync(List<Article> articles) {
 			final String method = CLASS_NAME + ".sync()";
 			LogUtil.log(method, "Server:"+  Server.getServerId() + " " +  "Syncing articles : " + articles);
 			Map<Integer, Article> allArticles = MemStore.getInstance().getAllArticles();
