@@ -16,7 +16,6 @@ import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.common.util.TimeUtil;
 import edu.umn.bulletinboard.server.coordinator.Coordinator;
 import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
-import edu.umn.bulletinboard.server.storage.MemStore;
 
 /**
  * Created by Abhijeet on 3/29/2014.
@@ -206,15 +205,6 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
 
 	@Override
 	public void replyToServer(int id, Article article) throws RemoteException {
-		final String method = CLASS_NAME + ".replyToServer()";
-		LogUtil.log(method, "Server:" + Server.getServerId()+ " Replying to article:"+id+" reply:"+article);
-		try {
-			MemStore.getInstance().addArticle(article);
-		} catch (InvalidArticleException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		MemStore.getInstance().getArticle(id).getReplies().add(article.getId());
-		LogUtil.log(method, "Server:" + Server.getServerId()+ " Updated memstore:" + MemStore.getInstance().getAllArticles().toString());
+		serverImpl.replyToServer(id, article);
 	}
 }

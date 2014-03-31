@@ -1,3 +1,3 @@
-NR=5
-NW=6
+NR=3
+NW=3
 consistencyType=Quorum

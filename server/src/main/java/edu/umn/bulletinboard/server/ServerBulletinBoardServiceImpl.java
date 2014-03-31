@@ -39,6 +39,11 @@ public class ServerBulletinBoardServiceImpl {
 	    	final String method = CLASS_NAME + ".read()";
 	    	LogUtil.log(method, "Server:"+  Server.getServerId() + " " +   "Choose for id : " + id);
 	    	if(ServerConfig.getConsistencyType().equals(ConsistencyType.SEQUENTIAL)) {
+	    		if(MemStore.getInstance().getAllArticles().containsKey(id)){
+	    			String message = "Article with Id:" + id + " not present.";
+	    			LogUtil.log(method, message);
+					throw new RemoteException(message);
+	    		}
 	    		return MemStore.getInstance().getArticle(id);
 	    	}
 	    	return Server.getCoodinatorServerRMIObjectHandle().chooseFromCoordinatingServer(id, ServerConfig.getConsistencyType());
@@ -64,6 +69,11 @@ public class ServerBulletinBoardServiceImpl {
 	    public  Article readFromServer(int articleId) throws RemoteException {
 	    	final String method = CLASS_NAME + ".readFromServer()";
 	    	LogUtil.log(method,"Server:"+  Server.getServerId() + " " +   "Reading " + articleId + " from server");
+	    	if(!MemStore.getInstance().getAllArticles().containsKey(articleId)) {
+	    		String message = "Article with Id:" + articleId + " not present.";
+	    		LogUtil.log(method, message);
+				throw new RemoteException(message);
+	    	}
 	        return MemStore.getInstance().getArticle(articleId);
 	    }
 
@@ -115,6 +125,24 @@ public class ServerBulletinBoardServiceImpl {
 				}
 			}
 			
+		}
+
+		public void replyToServer(int id, Article article) throws RemoteException {
+			final String method = CLASS_NAME + ".replyToServer()";
+			LogUtil.log(method, "Server:" + Server.getServerId()+ " Replying to article:"+id+" reply:"+article);
+			if(!MemStore.getInstance().getAllArticles().containsKey(id))  {
+				String message = "ArticleId: " + id + " not present cannot reply.";
+				LogUtil.log(method, message);
+				throw new RemoteException(message);
+			}
+			try {
+				MemStore.getInstance().addArticle(article);
+			} catch (InvalidArticleException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			MemStore.getInstance().getArticle(id).getReplies().add(article.getId());
+			LogUtil.log(method, "Server:" + Server.getServerId()+ " Updated memstore:" + MemStore.getInstance().getAllArticles().toString());
 		}
 
 }

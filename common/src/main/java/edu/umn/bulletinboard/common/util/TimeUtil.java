@@ -5,7 +5,7 @@ import java.util.Random;
 public final class TimeUtil {
 	
 	private static final int LOWER_LIMIT = 200;
-	private static final int UPPER_LIMIT = 500;
+	private static final int UPPER_LIMIT = 300;
 	
 	private TimeUtil() {
 		throw new IllegalStateException("Util class cannot be instantiated.");
