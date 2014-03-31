@@ -29,9 +29,6 @@ public enum ConsistencyType {
 	 * @return
 	 */
 	public static ConsistencyType getType(String typeStr) {
-		if(typeStr == null) {
-			throw new NullPointerException();
-		}
 		for(ConsistencyType value : ConsistencyType.values()) {
 			if(value.toString().equals(typeStr)) {
 				return value;

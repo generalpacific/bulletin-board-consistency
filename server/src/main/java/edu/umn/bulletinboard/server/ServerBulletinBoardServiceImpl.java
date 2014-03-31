@@ -18,7 +18,7 @@ public class ServerBulletinBoardServiceImpl {
 	    }
 
 	    public int reply(int id, Article reply) throws RemoteException {
-	        return 0;
+	        return Server.getCoodinatorServerRMIObjectHandle().reply(id, reply);
 	    }
 	    
 	    public void writeToServer(int articleId, String articleText) throws RemoteException {
