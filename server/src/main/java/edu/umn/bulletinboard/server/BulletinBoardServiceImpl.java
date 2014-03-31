@@ -78,6 +78,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     @Override
     public List<Article> readFromCoordinatingServer(ConsistencyType type) throws RemoteException {
     	final String method = CLASS_NAME + ".readFromCoordinatingServer()";
+    	LogUtil.log(method, "Reading from Coordinating server");
         try {
 			return coordServerImpl.readFromCoordinatingServer(type);
 		} catch (MalformedURLException e) {
@@ -92,6 +93,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     @Override
     public Article chooseFromCoordinatingServer(int id, ConsistencyType type) throws RemoteException {
     	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
+    	LogUtil.log(method, "Choosing from Coordinating server for id : " + id);
         try {
 			return coordServerImpl.chooseFromCoordinatingServer(id, type);
 		} catch (MalformedURLException e) {
@@ -105,7 +107,8 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
 
     @Override
     public int writeToCoordinatingServer(Article articleText, ConsistencyType type) throws RemoteException {
-    	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
+    	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
+    	LogUtil.log(method, "Writing to Coordinating server " + articleText);
         try {
 			return coordServerImpl.writeToCoordinatingServer(articleText, type);
 		} catch (MalformedURLException e) {
@@ -122,7 +125,8 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
 
     @Override
     public int replyToCoordinatingServer(int articleId, Article article, ConsistencyType type) throws RemoteException {
-    	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
+    	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
+    	LogUtil.log(method, "Replying to: "+ articleId+" article : "+article+" in Coordinating server");
         try {
 			return coordServerImpl.replyToCoordinatingServer(articleId, article, type);
 		} catch (MalformedURLException e) {

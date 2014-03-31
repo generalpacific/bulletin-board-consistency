@@ -60,7 +60,8 @@ public class Server {
 		
 		ServerConfig.loadProperties(args[2]);
 		
-		LogUtil.log(method, "Getting the CoordinatorServerRMIObject");
+		LogUtil.log(method, "Getting the CoordinatorServerRMIObject on " + ServerConfig.getCoordinatingServerIp() 
+				+ ":" + ServerConfig.getCoordinatingServerRMIPort()); 
 		try {
 			if(!ServerConfig.isCoordinatingServer()) {
 				coordinatorServerRMIObjectHandle = (BulletinBoardService) Naming.lookup("rmi://" + ServerConfig.getCoordinatingServerIp()
