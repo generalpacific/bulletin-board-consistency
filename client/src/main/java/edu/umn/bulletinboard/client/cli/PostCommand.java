@@ -5,7 +5,11 @@ import java.rmi.RemoteException;
 
 import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
+import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.exception.InvalidArticleException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.storage.MemStore;
+import edu.umn.bulletinboard.common.util.LogUtil;
 
 /**
  * Post a new article.
@@ -24,8 +28,19 @@ public class PostCommand extends BaseCommand {
 	public boolean execute() throws NumberFormatException, RemoteException,
 			ClientNullException {
 
-        System.out.println("New id: " +
-        Client.getInstance().getClient().post(getArgument(ARG_ARTICLE_TEXT)));
+        Client cli = Client.getInstance();
+
+        int id = cli.getClient().post(getArgument(ARG_ARTICLE_TEXT));
+        System.out.println("New id: " + id);
+
+        if (cli.isRYWSet()) {
+            try {
+                MemStore.getInstance().addArticle(new Article(id, getArgument(ARG_ARTICLE_TEXT)));
+            } catch (InvalidArticleException e) {
+                throw new RemoteException(e.getMessage());
+            }
+        }
+
 		return true;
 	}
 

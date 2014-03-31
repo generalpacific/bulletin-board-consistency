@@ -3,7 +3,9 @@ package edu.umn.bulletinboard.client.cli;
 import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.exception.InvalidArticleException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
+import edu.umn.bulletinboard.common.storage.MemStore;
 
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -29,9 +31,23 @@ public class ReplyCmd extends BaseCommand {
     public boolean execute() throws NumberFormatException, RemoteException
             , ClientNullException, MalformedURLException, NotBoundException {
 
-        System.out.println("New id: " +
-        Client.getInstance().getClient().reply(Integer.parseInt(getArgument(ARG_ID))
-                , new Article(-1, getArgument(ARG_ARTICLE_TEXT))));
+        Client cli = Client.getInstance();
+
+        int pId = Integer.parseInt(getArgument(ARG_ID));
+
+        int id = Client.getInstance().getClient().reply(pId
+                , new Article(-1, getArgument(ARG_ARTICLE_TEXT)));
+        System.out.println("New id: " + id);
+
+        if (cli.isRYWSet()) {
+            try {
+                MemStore.getInstance().getArticle(pId).addReplies(pId);
+                MemStore.getInstance().addArticle(new Article(id, getArgument(ARG_ARTICLE_TEXT)));
+            } catch (InvalidArticleException e) {
+                throw new RemoteException(e.getMessage());
+            }
+        }
+
 
         return true;
     }

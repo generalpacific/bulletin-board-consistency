@@ -25,6 +25,7 @@ public class DisconnectCmd extends BaseCommand {
             , ClientNullException, MalformedURLException, NotBoundException {
 
         Client.getInstance().setClient(null);
+        Client.getInstance().setRead(false);
         return true;
     }
 }
