@@ -64,7 +64,7 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-	public synchronized  List<Article> readFromCoordinatingServer(ConsistencyType type)
+	public List<Article> readFromCoordinatingServer(ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".readFromCoordinatingServer()";
@@ -77,12 +77,16 @@ public class Coordinator {
 
         //see which is the max value, get all the values from that server and return them
         int latestUpdatedServerId = getLatestUpdatedServerId();
-		BulletinBoardService client = getClient(servers.get(latestUpdatedServerId), latestUpdatedServerId);
+        ServerInfo sInfo = null;
+        synchronized (ServerLock.register) {
+        	sInfo = servers.get(latestUpdatedServerId);
+		}
+		BulletinBoardService client = getClient(sInfo, latestUpdatedServerId);
 		TimeUtil.delay();
         return client.readFromServer();
 	}
 
-    private synchronized int getLatestUpdatedServerId() throws RemoteException, NotBoundException
+    private int getLatestUpdatedServerId() throws RemoteException, NotBoundException
             , MalformedURLException {
         Random random = new Random();
 
@@ -95,7 +99,11 @@ public class Coordinator {
                 servId = 99;
             }
 
-            if (0 == servId || null == servers.get(servId)
+            ServerInfo serverInfo = null; 
+            synchronized (ServerLock.register) {
+            	serverInfo = servers.get(servId);	
+			}
+			if (0 == servId || null == serverInfo
                     || alreadyRead.contains(servId)) {
                 --i;
                 continue;
@@ -103,7 +111,7 @@ public class Coordinator {
 
             alreadyRead.add(servId);
 
-            BulletinBoardService client = getClient(servers.get(servId),servId);
+            BulletinBoardService client = getClient(serverInfo,servId);
             if (client.getLatestArticleId() > max) {
             	TimeUtil.delay();
                 max = client.getLatestArticleId();
@@ -139,7 +147,7 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-	public synchronized  Article chooseFromCoordinatingServer(int id, ConsistencyType type)
+	public Article chooseFromCoordinatingServer(int id, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
@@ -153,19 +161,32 @@ public class Coordinator {
         int latestUpdatedServerId = getLatestUpdatedServerId();
 
         //see which is the max value, get all the values from that server and return them
-        BulletinBoardService client = getClient(servers.get(latestUpdatedServerId),latestUpdatedServerId);
+        ServerInfo sInfo = null;
+        synchronized (ServerLock.register) {
+        	 sInfo = servers.get(latestUpdatedServerId);
+        }
+        BulletinBoardService client = getClient(sInfo,latestUpdatedServerId);
+        
         TimeUtil.delay();
         return client.readFromServer(id);
 	}
 
-    private synchronized void syncAll(int id, Article article) throws RemoteException, NotBoundException
+    private void syncAll(int id, Article article) throws RemoteException, NotBoundException
             , MalformedURLException {
     	
     	final String method = CLASS_NAME + ".syncAll()";
     	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Syncing ALL : "  + id  + ":" + article);
-        for (int i : servers.keySet()) {
+    	Set<Integer> keySet = null;
+    	synchronized (ServerLock.register) {
+    		 keySet = servers.keySet();
+    	}
+		for (int i : keySet) {
         	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Syncing to server: "  + i);
-            BulletinBoardService client = getClient(servers.get(i),i);
+            ServerInfo sInfo = servers.get(i);
+            synchronized (ServerLock.register) {
+            	sInfo = servers.get(i);
+			}
+			BulletinBoardService client = getClient(sInfo,i);
             if (-1 == id) {
             	TimeUtil.delay();
                 client.writeToServer(article);
@@ -173,7 +194,8 @@ public class Coordinator {
             	TimeUtil.delay();
                 client.replyToServer(id, article);
             }
-        }
+        }	
+        
     }
 
     /**
@@ -184,14 +206,14 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-    public synchronized  int writeToCoordinatingServer(Article articleText, ConsistencyType type)
+    public int writeToCoordinatingServer(Article articleText, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException, InvalidArticleException {
     	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
     	LogUtil.log(method,"Server:"+  Server.getServerId() + " "+  "Writing " +  articleText + " to coordinating server");
         return writeReply(-1, articleText, type);
     }
 
-    private synchronized  int writeReply(int id, Article articleText, ConsistencyType type)
+    private int writeReply(int id, Article articleText, ConsistencyType type)
             throws RemoteException, InvalidArticleException, MalformedURLException
             , NotBoundException {
     	final String method = CLASS_NAME + ".writeReply()";
@@ -219,7 +241,11 @@ public class Coordinator {
                 servId = 99;
             }
 
-            if (0 == servId || null == servers.get(servId)
+            ServerInfo serverInfo = null;
+            synchronized (ServerLock.register) {
+            	serverInfo = servers.get(servId);	
+			}
+			if (0 == servId || null == serverInfo
                     || alreadySent.contains(servId)) {
                 --i;
                 continue;
@@ -227,7 +253,7 @@ public class Coordinator {
 
             alreadySent.add(servId);
 
-            BulletinBoardService client = getClient(servers.get(servId), servId);
+            BulletinBoardService client = getClient(serverInfo, servId);
             if (-1 == id) {
             	TimeUtil.delay();
                 client.writeToServer(articleText);
@@ -250,7 +276,7 @@ public class Coordinator {
      * @return
      * @throws RemoteException
      */
-    public synchronized  int replyToCoordinatingServer(int articleId, Article article
+    public int replyToCoordinatingServer(int articleId, Article article
             , ConsistencyType type) throws RemoteException, InvalidArticleException
             , NotBoundException, MalformedURLException {
     	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
@@ -264,7 +290,7 @@ public class Coordinator {
      * @return article id
      * @throws RemoteException
      */
-	public synchronized  int getNextArticleID() throws RemoteException {
+	public int getNextArticleID() throws RemoteException {
 
         // this should be  as a lot of Servers will simultaneously
         // call this method.
@@ -280,7 +306,7 @@ public class Coordinator {
      * @return server id
      * @throws RemoteException
      */
-    public synchronized   RegisterRet register(String ip, int port) throws RemoteException {
+    public RegisterRet register(String ip, int port) throws RemoteException {
 
         RegisterRet ret = null;
 
@@ -304,13 +330,21 @@ public class Coordinator {
 
     private int getNW() {
         if (-1 == ServerConfig.getNW()) {
-            return servers.size();
+            int size = 0;
+            synchronized (ServerLock.register) {
+            	size = servers.size();
+			}
+			return size;
         }
         return ServerConfig.getNW();
     }
     
-    public synchronized  Set<ServerInfo> getServers() {
-    	return new HashSet<ServerInfo>(servers.values());
+    public Set<ServerInfo> getServers() {
+    	HashSet<ServerInfo> hashSet = null;
+    	synchronized (ServerLock.register) {
+    		hashSet = new HashSet<ServerInfo>(servers.values());	
+		}
+		return hashSet;
     }
     
     public Map<Integer, ServerInfo> getServerMap() {
