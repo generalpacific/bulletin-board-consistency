@@ -85,22 +85,6 @@ public class Server {
 		}
 		LogUtil.log(method, "DONE getting the CoordinatorServerRMIObject");
 		
-		if(ServerConfig.isCoordinatingServer()) {
-			LogUtil.log(method, "Starting the sync thread for coordinator");
-			ExecutorService executorService = Executors.newSingleThreadExecutor();
-			Future<Boolean> submit = executorService.submit(new CoordinatorSyncThread());
-			try {
-				submit.get();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				LogUtil.log(method, "Got exception in sync thread : " + e.getMessage());
-			}
-			LogUtil.log(method, "DONE Starting the sync thread for coordinator");
-		}
-		
-		
 		LogUtil.log(method, "Registering to the coordinating server");
 		try {
 			if(!ServerConfig.isCoordinatingServer()) {
@@ -135,7 +119,22 @@ public class Server {
 			LogUtil.log(method, "Got exception " + e.getMessage() + ". Exiting.");
 			System.exit(1);
 		}
-		LogUtil.log(method, "DONE Binding " + RMIConstants.BB_SERVICE);	
+		LogUtil.log(method, "DONE Binding " + RMIConstants.BB_SERVICE);
+		
+		if(ServerConfig.isCoordinatingServer()) {
+			LogUtil.log(method, "Starting the sync thread for coordinator");
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
+			Future<Boolean> submit = executorService.submit(new CoordinatorSyncThread());
+			try {
+				submit.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				LogUtil.log(method, "Got exception in sync thread : " + e.getMessage());
+			}
+			LogUtil.log(method, "DONE Starting the sync thread for coordinator");
+		}
 	}
 
 	public static BulletinBoardService getCoodinatorServerRMIObjectHandle() {
