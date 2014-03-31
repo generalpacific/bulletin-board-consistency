@@ -95,9 +95,13 @@ public class Client {
 		try {
 			cmd = CommandFactory.getCommand(cmdStr);
 
+            long start = System.nanoTime();
 			if (!cmd.execute()) {
 				LogUtil.info(CommandConstants.ERR_COMMAND_EXEC_FAILED);
 			}
+
+            System.out.println("Time elapsed: " + (System.nanoTime() - start) + " ns.");
+
 		} catch (IllegalCommandException e) {
 			LogUtil.error("", e.getMessage());
 		} catch (RemoteException e) {

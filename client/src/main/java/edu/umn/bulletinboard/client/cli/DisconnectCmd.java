@@ -3,6 +3,7 @@ package edu.umn.bulletinboard.client.cli;
 import edu.umn.bulletinboard.client.Client;
 import edu.umn.bulletinboard.client.constants.CommandConstants;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
+import edu.umn.bulletinboard.common.storage.MemStore;
 
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -33,6 +34,7 @@ public class DisconnectCmd extends BaseCommand {
 
         cli.setClient(null);
         cli.setRead(false);
+        MemStore.getInstance().getAllArticles().clear();
         return true;
     }
 }
