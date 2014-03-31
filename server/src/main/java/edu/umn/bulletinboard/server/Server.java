@@ -29,8 +29,6 @@ public class Server {
 	
 	private static final String CLASS_NAME = Server.class.getSimpleName();
 	
-	private static String coordinatingServerIp = null;
-	private static int coordinatingServerRMIPort = -1;
 	private static String serverIp = null;
 	private static int serverRMIPort = -1;
 	private static BulletinBoardService coordinatorServerRMIObjectHandle = null;
@@ -39,8 +37,8 @@ public class Server {
 	
 	public static void main(String args[]) {
 		final String method = CLASS_NAME + ".main()";
-		if(args.length != 4) {
-			LogUtil.log(method, "Invalid cli arguments. Usage server <co-ordinating server> <co-ordinating server rmi port> <server ip> <server rmi port>");
+		if(args.length != 2) {
+			LogUtil.log(method, "Invalid cli arguments. Usage server <server ip> <server rmi port>");
 			return;
 		}
 		
@@ -48,29 +46,19 @@ public class Server {
 			LogUtil.log(method, args[0] + " is not a valid IP.");
 			return;
 		}
-		coordinatingServerIp = args[0];
+		serverIp = args[0];
 		
 		if(!ContentValidator.isValidPort(args[1])) {
 			LogUtil.log(method, args[1] + " is not a valid Port.");
 			return;
 		}
-		coordinatingServerRMIPort = Integer.parseInt(args[1]);
+		serverRMIPort = Integer.parseInt(args[1]);
 		
-		if(!ContentValidator.isValidIp(args[2])) {
-			LogUtil.log(method, args[2] + " is not a valid IP.");
-			return;
-		}
-		serverIp = args[2];
-		
-		if(!ContentValidator.isValidPort(args[3])) {
-			LogUtil.log(method, args[3] + " is not a valid Port.");
-			return;
-		}
-		serverRMIPort = Integer.parseInt(args[3]);
+		ServerConfig.loadProperties();
 		
 		try {
-			coordinatorServerRMIObjectHandle = (BulletinBoardService) Naming.lookup("rmi://" + coordinatingServerIp
-					+ ":" + coordinatingServerRMIPort + "/"
+			coordinatorServerRMIObjectHandle = (BulletinBoardService) Naming.lookup("rmi://" + ServerConfig.getCoordinatingServerIp()
+					+ ":" + ServerConfig.getCoordinatingServerRMIPort() + "/"
 					+ RMIConstants.BB_SERVICE);
 		} catch (MalformedURLException e) {
 			LogUtil.log(method, "Got exception " + e.getMessage() + ". Exiting.");
@@ -84,9 +72,9 @@ public class Server {
 		}
 		
 		try {
-            RegisterRet ret = coordinatorServerRMIObjectHandle.register(serverIp, serverRMIPort);
+			RegisterRet ret = coordinatorServerRMIObjectHandle.register(serverIp, serverRMIPort);
 			serverId = ret.getId();
-            servers = new ArrayList<ServerInfo>(ret.getServers());
+	        servers = new ArrayList<ServerInfo>(ret.getServers());
 		} catch (RemoteException e1) {
 			LogUtil.log(method, "Cannot register to the coordinating server " + e1.getMessage() + ". Exiting.");
 			System.exit(1);
@@ -114,7 +102,7 @@ public class Server {
 		}
 		LogUtil.log(method, "DONE Binding " + RMIConstants.BB_SERVICE);	
 	}
-	
+
 	public static BulletinBoardService getCoodinatorServerRMIObjectHandle() {
 		return coordinatorServerRMIObjectHandle;
 	}
