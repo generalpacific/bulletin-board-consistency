@@ -11,6 +11,19 @@ import java.util.*;
  * Created by Abhijeet on 3/30/2014.
  */
 public class IndentArticles {
+	
+	private IndentArticles() {
+		throw new IllegalStateException("Cannot instantiate this class.");
+	}
+	
+	public static Map<Integer, Article> getArticleMap(List<Article> articles) {
+		Map<Integer,Article> map = new TreeMap<Integer, Article>();
+		
+		for (Article article : articles) {
+			map.put(article.getId(), article);
+		}
+		return map;
+	}
 
     /**
      * DFS traversal, to print the articles.

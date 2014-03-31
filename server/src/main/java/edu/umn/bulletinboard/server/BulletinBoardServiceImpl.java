@@ -1,5 +1,7 @@
 package edu.umn.bulletinboard.server;
 
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.server.coordinator.Coordinator;
+import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
 
 /**
  * Created by Abhijeet on 3/29/2014.
@@ -20,7 +23,7 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
     private static BulletinBoardServiceImpl bb = null;
     private final ServerBulletinBoardServiceImpl serverImpl = new ServerBulletinBoardServiceImpl();
-    private final Coordinator coordServerImpl = new Coordinator();
+    private final Coordinator coordServerImpl = Coordinator.getInstance();
 
     private BulletinBoardServiceImpl() {
     }
@@ -54,22 +57,50 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
     @Override
     public List<Article> readFromCoordinatingServer(ConsistencyType type) throws RemoteException {
-        return coordServerImpl.readFromCoordinatingServer(type);
+        try {
+			return coordServerImpl.readFromCoordinatingServer(type);
+		} catch (MalformedURLException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		} catch (NotBoundException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		}
     }
 
     @Override
     public Article chooseFromCoordinatingServer(int id, ConsistencyType type) throws RemoteException {
-        return coordServerImpl.chooseFromCoordinatingServer(id, type);
+        try {
+			return coordServerImpl.chooseFromCoordinatingServer(id, type);
+		} catch (MalformedURLException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		} catch (NotBoundException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		}
     }
 
     @Override
     public int writeToCoordinatingServer(Article articleText, ConsistencyType type) throws RemoteException {
-        return coordServerImpl.writeToCoordinatingServer(articleText, type);
+        try {
+			return coordServerImpl.writeToCoordinatingServer(articleText, type);
+		} catch (MalformedURLException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		} catch (NotBoundException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		} catch (InvalidArticleException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		}
     }
 
     @Override
     public int replyToCoordinatingServer(int articleId, Article article, ConsistencyType type) throws RemoteException {
-        return coordServerImpl.replyToCoordinatingServer(articleId, type);
+        try {
+			return coordServerImpl.replyToCoordinatingServer(articleId, article, type);
+		} catch (MalformedURLException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		} catch (InvalidArticleException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		} catch (NotBoundException e) {
+			throw new RemoteException("Got exception in connection to other servers.",e);
+		}
     }
 
     @Override
@@ -114,7 +145,8 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
 
 	@Override
 	public List<ServerInfo> getRegisteredServers() throws RemoteException {
-		return coordServerImpl.getRegisteredServers();
+		//TODO
+		return null;
 	}
 
 	@Override

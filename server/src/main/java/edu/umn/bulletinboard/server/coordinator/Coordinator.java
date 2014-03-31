@@ -272,4 +272,8 @@ public class Coordinator {
         }
         return ServerConfig.getNW();
     }
+    
+    public Set<ServerInfo> getServers() {
+    	return new HashSet(servers.values());
+    }
 }

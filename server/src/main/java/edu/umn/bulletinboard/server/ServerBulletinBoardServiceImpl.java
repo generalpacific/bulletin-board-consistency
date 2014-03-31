@@ -1,40 +1,107 @@
 package edu.umn.bulletinboard.server;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.exception.IllegalIPException;
+import edu.umn.bulletinboard.common.server.ServerInfo;
+import edu.umn.bulletinboard.common.util.ConsistencyType;
+import edu.umn.bulletinboard.common.util.IndentArticles;
+import edu.umn.bulletinboard.common.util.LogUtil;
+import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
+import edu.umn.bulletinboard.server.storage.MemStore;
 
 public class ServerBulletinBoardServiceImpl {
-	    public int post(String article) throws RemoteException {
-	        return 0;
+		private static final String CLASS_NAME = ServerBulletinBoardServiceImpl.class.getSimpleName();
+	    
+		public synchronized int post(String article) throws RemoteException {
+			final String method = CLASS_NAME + ".post()";
+			LogUtil.log(method, "Posting " + article );
+	        return Server.getCoodinatorServerRMIObjectHandle().writeToCoordinatingServer(new Article(-1, article) ,ServerConfig.getConsistencyType()) ;
 	    }
 
-	    public String read() throws RemoteException {
-	        return null;
+	    public synchronized String read() throws RemoteException {
+	    	final String method = CLASS_NAME + ".read()";
+	    	LogUtil.log(method, "Reading articles");
+	    	if(ServerConfig.getConsistencyType().equals(ConsistencyType.SEQUENTIAL)) {
+	    		return IndentArticles.getArticlesStr(MemStore.getInstance().getAllArticles());
+	    	}
+	    	List<Article> readFromCoordinatingServer = Server.getCoodinatorServerRMIObjectHandle().readFromCoordinatingServer(ServerConfig.getConsistencyType());
+	        return IndentArticles.getArticlesStr(IndentArticles.getArticleMap(readFromCoordinatingServer));
 	    }
 
-	    public Article choose(int id) throws RemoteException {
-	        return null;
+	    public synchronized Article choose(int id) throws RemoteException {
+	    	if(ServerConfig.getConsistencyType().equals(ConsistencyType.SEQUENTIAL)) {
+	    		return MemStore.getInstance().getArticle(id);
+	    	}
+	    	return Server.getCoodinatorServerRMIObjectHandle().chooseFromCoordinatingServer(id, ServerConfig.getConsistencyType());
 	    }
 
-	    public int reply(int id, Article reply) throws RemoteException {
+	    public synchronized int reply(int id, Article reply) throws RemoteException {
 	        return Server.getCoodinatorServerRMIObjectHandle().reply(id, reply);
 	    }
 	    
-	    public void writeToServer(int articleId, String articleText) throws RemoteException {
-
+	    public synchronized void writeToServer(int articleId, String articleText) throws RemoteException {
+	    	try {
+				MemStore.getInstance().addArticle(new Article(articleId, articleText));
+			} catch (InvalidArticleException e) {
+				throw new RemoteException("Invalid article", e);
+			}
 	    }
 
-	    public String readFromServer(int articleId) throws RemoteException {
-	        return null;
+	    public synchronized Article readFromServer(int articleId) throws RemoteException {
+	        return MemStore.getInstance().getArticle(articleId);
 	    }
 
-	    public int getLatestArticleId() throws RemoteException {
-	        return 0;
+	    public synchronized int getLatestArticleId() throws RemoteException {
+	        Map<Integer, Article> allArticles = MemStore.getInstance().getAllArticles();
+	        Set<Integer> keySet = allArticles.keySet();
+	        int max = -1;
+	        for (Integer integer : keySet) {
+				if(integer > max) {
+					max = integer;
+				}
+			}
+	        return max;
 	    }
 
-	    public void addServer(int serverId) throws RemoteException {
-	    
+	    public synchronized void addServer(int serverId) throws RemoteException, IllegalIPException {
+	    	// TODO
+	    	Server.getServers().add(new ServerInfo(serverId, null,  1));
 	    }
+
+		public synchronized List<Article> readFromServer() {
+			return new ArrayList(MemStore.getInstance().getAllArticles().values());
+		}
+
+		public synchronized void sync(List<Article> articles) {
+			final String method = CLASS_NAME + ".sync()";
+			Map<Integer, Article> allArticles = MemStore.getInstance().getAllArticles();
+			for (Article article : articles) {
+				int id = article.getId();
+				if(allArticles.containsKey(id)) {
+					Article currentArticle = allArticles.get(id);
+					List<Integer> replies = currentArticle.getReplies();
+					List<Integer> newReplies = article.getReplies();
+					List<Integer> list = new ArrayList<Integer>();
+					list.addAll(newReplies);
+					list.removeAll(replies);
+					for (Integer integer : list) {
+						currentArticle.getReplies().add(integer);
+					}
+				}else{
+					try {
+						MemStore.getInstance().addArticle(article);
+					} catch (InvalidArticleException e) {
+						LogUtil.log(method, "Invalid article: " + article + " in sync. Will try again in next sync.");
+					}
+				}
+			}
+			
+		}
 
 }
