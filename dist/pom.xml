@@ -59,6 +59,7 @@
                         <mkdir dir="target/bulletinboard-${project.version}"/>
                         <mkdir dir="target/bulletinboard-${project.version}/lib"/>
                         <mkdir dir="target/bulletinboard-${project.version}/bin"/>
+                      <mkdir dir="target/bulletinboard-${project.version}/conf"/>
 
                         <copy todir="target/bulletinboard-${project.version}" includeEmptyDirs="false" flatten="false">
                           <fileset dir="../">
@@ -73,6 +74,12 @@
                             <exclude name="**/dist/**" />
                           </fileset>
                         </copy>
+
+                      <copy todir="target/bulletinboard-${project.version}/conf" includeEmptyDirs="false" flatten="false">
+                          <fileset dir="../server/conf">
+                              <include name="**"/>
+                          </fileset>
+                      </copy>
 
                         <copy todir="target/bulletinboard-${project.version}" includeEmptyDirs="false" flatten="false">
                           <fileset dir="../client/target">
