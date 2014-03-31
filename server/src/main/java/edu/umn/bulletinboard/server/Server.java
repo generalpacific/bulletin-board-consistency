@@ -13,11 +13,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
+import edu.umn.bulletinboard.common.exception.IllegalIPException;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.rmi.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.common.validator.ContentValidator;
+import edu.umn.bulletinboard.server.coordinator.Coordinator;
 
 /**
  * This is the entry point for the server.
@@ -101,9 +103,19 @@ public class Server {
 		
 		LogUtil.log(method, "Registering to the coordinating server");
 		try {
-			RegisterRet ret = coordinatorServerRMIObjectHandle.register(serverIp, serverRMIPort);
-			serverId = ret.getId();
-	        servers = new HashSet<ServerInfo>(ret.getServers());
+			if(!ServerConfig.isCoordinatingServer()) {
+				RegisterRet ret = coordinatorServerRMIObjectHandle.register(serverIp, serverRMIPort);
+				serverId = ret.getId();
+		        servers = new HashSet<ServerInfo>(ret.getServers());
+			}else{
+				serverId = 99;
+				try {
+					Coordinator.getInstance().getServerMap().put(99, new ServerInfo(serverIp, serverRMIPort));
+				} catch (IllegalIPException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		} catch (RemoteException e1) {
 			LogUtil.log(method, "Cannot register to the coordinating server " + e1.getMessage() + ". Exiting.");
 			System.exit(1);

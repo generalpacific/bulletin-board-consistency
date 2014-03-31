@@ -293,4 +293,8 @@ public class Coordinator {
     public Set<ServerInfo> getServers() {
     	return new HashSet(servers.values());
     }
+    
+    public Map<Integer, ServerInfo> getServerMap() {
+    	return servers;
+    }
 }
