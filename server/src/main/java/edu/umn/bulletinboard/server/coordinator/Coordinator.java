@@ -206,6 +206,7 @@ public class Coordinator {
         //quorum consistency
         //add the article
 
+        Set<Integer> alreadySent = new HashSet<Integer>();
         Random random = new Random();
         for (int i = 0; i < getNW(); ++i) {
             int servId = random.nextInt(serverIdCounter + 2); //exclusive
@@ -214,10 +215,13 @@ public class Coordinator {
                 servId = 99;
             }
 
-            if (0 == servId || null == servers.get(servId)) {
+            if (0 == servId || null == servers.get(servId)
+                    || alreadySent.contains(servId)) {
                 --i;
                 continue;
             }
+
+            alreadySent.add(servId);
 
             BulletinBoardService client = getClient(servers.get(servId), servId);
             if (-1 == id) {
