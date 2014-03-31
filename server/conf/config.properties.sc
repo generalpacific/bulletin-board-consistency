@@ -1,5 +1,5 @@
 NR=5
 NW=6
-coordinatingServerIp=10.0.0.7
+coordinatingServerIp=128.101.35.181
 coordinatingServerRMIPort=1099
 consistencyType=Sequential
