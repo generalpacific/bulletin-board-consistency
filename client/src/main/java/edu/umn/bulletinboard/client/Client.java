@@ -100,7 +100,8 @@ public class Client {
 				LogUtil.info(CommandConstants.ERR_COMMAND_EXEC_FAILED);
 			}
 
-            System.out.println("Time elapsed: " + (System.nanoTime() - start) + " ns.");
+            System.out.println("Time elapsed: " + (System.nanoTime()
+                    - start)/Math.pow(10,6) + " ms.");
 
 		} catch (IllegalCommandException e) {
 			LogUtil.error("", e.getMessage());
