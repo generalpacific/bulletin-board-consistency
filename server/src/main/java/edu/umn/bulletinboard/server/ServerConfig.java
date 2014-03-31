@@ -75,7 +75,7 @@ public class ServerConfig {
 			System.exit(1);
 		}
 		consistencyType = tempType;
-		if(consistencyType.equals(ConsistencyType.RUW)) {
+		if(consistencyType.equals(ConsistencyType.RYW)) {
 			consistencyType = ConsistencyType.SEQUENTIAL;
 		}
 		

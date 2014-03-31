@@ -14,7 +14,7 @@ public enum ConsistencyType {
 	
 	QUORUM("Quorum"),
 	SEQUENTIAL("Sequential"),
-	RUW("Read-your-Write");
+	RYW("Read-your-Write");
 	
 	private final String consistency;
 	
