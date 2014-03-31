@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import edu.umn.bulletinboard.client.Client;
+import edu.umn.bulletinboard.client.constants.CommandConstants;
 import edu.umn.bulletinboard.client.exceptions.ClientNullException;
 import edu.umn.bulletinboard.common.content.Article;
 import edu.umn.bulletinboard.common.exception.InvalidArticleException;
@@ -29,6 +30,11 @@ public class PostCommand extends BaseCommand {
 			ClientNullException {
 
         Client cli = Client.getInstance();
+
+        if (null == cli.getClient()) {
+            throw new RemoteException(CommandConstants.ERR_CLIENT_NULL);
+        }
+
 
         int id = cli.getClient().post(getArgument(ARG_ARTICLE_TEXT));
         System.out.println("New id: " + id);
