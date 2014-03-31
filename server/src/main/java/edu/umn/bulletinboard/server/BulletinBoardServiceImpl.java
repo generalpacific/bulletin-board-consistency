@@ -15,6 +15,7 @@ import edu.umn.bulletinboard.common.util.ConsistencyType;
 import edu.umn.bulletinboard.common.util.LogUtil;
 import edu.umn.bulletinboard.server.coordinator.Coordinator;
 import edu.umn.bulletinboard.server.exceptions.InvalidArticleException;
+import edu.umn.bulletinboard.server.storage.MemStore;
 
 /**
  * Created by Abhijeet on 3/29/2014.
@@ -50,35 +51,35 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     @Override
     public int post(String article) throws RemoteException {
     	final String method = CLASS_NAME + ".post()";
-    	LogUtil.log(method, "Post article: " + article);
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Post article: " + article);
         return serverImpl.post(article);
     }
 
     @Override
     public String read() throws RemoteException {
     	final String method = CLASS_NAME + ".read()";
-    	LogUtil.log(method, "Reading articles");
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Reading articles");
         return serverImpl.read();
     }
 
     @Override
     public Article choose(int id) throws RemoteException {
     	final String method = CLASS_NAME + ".choose()";
-    	LogUtil.log(method, "Choose for id: " + id);
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Choose for id: " + id);
         return serverImpl.choose(id);
     }
 
     @Override
     public int reply(int id, Article reply) throws RemoteException {
     	final String method = CLASS_NAME + ".reply()";
-    	LogUtil.log(method, "Reply : " + reply + " for id: " + id);
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Reply : " + reply + " for id: " + id);
         return serverImpl.reply(id, reply);
     }
 
     @Override
     public List<Article> readFromCoordinatingServer(ConsistencyType type) throws RemoteException {
     	final String method = CLASS_NAME + ".readFromCoordinatingServer()";
-    	LogUtil.log(method, "Reading from Coordinating server");
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Reading from Coordinating server");
         try {
 			return coordServerImpl.readFromCoordinatingServer(type);
 		} catch (MalformedURLException e) {
@@ -93,7 +94,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     @Override
     public Article chooseFromCoordinatingServer(int id, ConsistencyType type) throws RemoteException {
     	final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
-    	LogUtil.log(method, "Choosing from Coordinating server for id : " + id);
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Choosing from Coordinating server for id : " + id);
         try {
 			return coordServerImpl.chooseFromCoordinatingServer(id, type);
 		} catch (MalformedURLException e) {
@@ -108,7 +109,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     @Override
     public int writeToCoordinatingServer(Article articleText, ConsistencyType type) throws RemoteException {
     	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
-    	LogUtil.log(method, "Writing to Coordinating server " + articleText);
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Writing to Coordinating server " + articleText);
         try {
 			return coordServerImpl.writeToCoordinatingServer(articleText, type);
 		} catch (MalformedURLException e) {
@@ -126,7 +127,7 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
     @Override
     public int replyToCoordinatingServer(int articleId, Article article, ConsistencyType type) throws RemoteException {
     	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
-    	LogUtil.log(method, "Replying to: "+ articleId+" article : "+article+" in Coordinating server");
+    	LogUtil.log(method, "Server:"+Server.getServerId()+" "+ "Replying to: "+ articleId+" article : "+article+" in Coordinating server");
         try {
 			return coordServerImpl.replyToCoordinatingServer(articleId, article, type);
 		} catch (MalformedURLException e) {
@@ -194,7 +195,15 @@ public class BulletinBoardServiceImpl extends UnicastRemoteObject implements Bul
 
 	@Override
 	public void replyToServer(int id, Article article) throws RemoteException {
-		// TODO Auto-generated method stub
-		
+		final String method = CLASS_NAME + ".replyToServer()";
+		LogUtil.log(method, "Server:" + Server.getServerId()+ " Replying to article:"+id+" reply:"+article);
+		try {
+			MemStore.getInstance().addArticle(article);
+		} catch (InvalidArticleException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MemStore.getInstance().getArticle(id).getReplies().add(article.getId());
+		LogUtil.log(method, "Server:" + Server.getServerId()+ " Updated memstore:" + MemStore.getInstance().getAllArticles().toString());
 	}
 }
