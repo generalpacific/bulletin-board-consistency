@@ -149,8 +149,11 @@ public class Coordinator {
 
     private void syncAll(int id, Article article) throws RemoteException, NotBoundException
             , MalformedURLException {
-
+    	
+    	final String method = CLASS_NAME + ".syncAll()";
+    	LogUtil.log(method, "Syncing ALL : "  + id  + ":" + article);
         for (int i : servers.keySet()) {
+        	LogUtil.log(method, "Syncing to server: "  + i);
             BulletinBoardService client = getClient(servers.get(i));
             if (-1 == id) {
                 client.writeToServer(article);
@@ -178,6 +181,8 @@ public class Coordinator {
     private int writeReply(int id, Article articleText, ConsistencyType type)
             throws RemoteException, InvalidArticleException, MalformedURLException
             , NotBoundException {
+    	final String method = CLASS_NAME + ".writeReply()";
+    	LogUtil.log(method, "Writing "  + id + ":" + articleText);
         if (! (type == ConsistencyType.QUORUM || type == ConsistencyType.SEQUENTIAL)) {
             throw new RemoteException("Not a quorum/sequential consistency");
         }
