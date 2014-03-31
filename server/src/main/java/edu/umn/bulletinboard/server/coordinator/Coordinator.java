@@ -67,7 +67,7 @@ public class Coordinator {
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".readFromCoordinatingServer()";
-    	LogUtil.log(method,"Server:"+  Server.getServerId() +  "Reading from coordinating server");
+    	LogUtil.log(method,"Server:"+  Server.getServerId() + " "+  "Reading from coordinating server");
         //for quorum consistency only
         //TODO: pick up consistency level from properties file
         if (type != ConsistencyType.QUORUM) {
@@ -109,11 +109,13 @@ public class Coordinator {
 
     private BulletinBoardService getClient(ServerInfo sInfo, int serverId) throws RemoteException
             , NotBoundException, MalformedURLException {
-
+    	final String method = CLASS_NAME + ".getClient()";
         BulletinBoardService client = null;
         if (99 == serverId) {
             client = BulletinBoardServiceImpl.getInstance();
         } else {
+        	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Getting client id "  + serverId + " address:"+sInfo.getIp()+":"
+        			+ sInfo.getPort());
             client = (BulletinBoardService) Naming.lookup("rmi://"
                     + sInfo.getIp() + ":" + sInfo.getPort()
                     + "/" + RMIConstants.BB_SERVICE);
@@ -134,7 +136,7 @@ public class Coordinator {
             throws RemoteException, MalformedURLException, NotBoundException {
 
 		final String method = CLASS_NAME + ".chooseFromCoordinatingServer()";
-    	LogUtil.log(method, "Server:"+  Server.getServerId() + "Choose from coordinating server for id : " + id);
+    	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Choose from coordinating server for id : " + id);
         //for quorum consistency only
         //TODO: pick up consistency level from properties file
         if (type != ConsistencyType.QUORUM) {
@@ -152,9 +154,9 @@ public class Coordinator {
             , MalformedURLException {
     	
     	final String method = CLASS_NAME + ".syncAll()";
-    	LogUtil.log(method, "Server:"+  Server.getServerId() + "Syncing ALL : "  + id  + ":" + article);
+    	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Syncing ALL : "  + id  + ":" + article);
         for (int i : servers.keySet()) {
-        	LogUtil.log(method, "Server:"+  Server.getServerId() + "Syncing to server: "  + i);
+        	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Syncing to server: "  + i);
             BulletinBoardService client = getClient(servers.get(i),i);
             if (-1 == id) {
                 client.writeToServer(article);
@@ -175,7 +177,7 @@ public class Coordinator {
     public synchronized int writeToCoordinatingServer(Article articleText, ConsistencyType type)
             throws RemoteException, MalformedURLException, NotBoundException, InvalidArticleException {
     	final String method = CLASS_NAME + ".writeToCoordinatingServer()";
-    	LogUtil.log(method,"Server:"+  Server.getServerId() +  "Writing " +  articleText + " to coordinating server");
+    	LogUtil.log(method,"Server:"+  Server.getServerId() + " "+  "Writing " +  articleText + " to coordinating server");
         return writeReply(-1, articleText, type);
     }
 
@@ -183,7 +185,7 @@ public class Coordinator {
             throws RemoteException, InvalidArticleException, MalformedURLException
             , NotBoundException {
     	final String method = CLASS_NAME + ".writeReply()";
-    	LogUtil.log(method, "Server:"+  Server.getServerId() + "Writing "  + id + ":" + articleText);
+    	LogUtil.log(method, "Server:"+  Server.getServerId() + " "+ "Writing "  + id + ":" + articleText);
         if (! (type == ConsistencyType.QUORUM || type == ConsistencyType.SEQUENTIAL)) {
             throw new RemoteException("Not a quorum/sequential consistency");
         }
@@ -236,7 +238,7 @@ public class Coordinator {
             , ConsistencyType type) throws RemoteException, InvalidArticleException
             , NotBoundException, MalformedURLException {
     	final String method = CLASS_NAME + ".replyToCoordinatingServer()";
-    	LogUtil.log(method,"Server:"+  Server.getServerId() +  "Replying " + article + " to article id: " + articleId + " in coordinating server");
+    	LogUtil.log(method,"Server:"+  Server.getServerId() + " "+  "Replying " + article + " to article id: " + articleId + " in coordinating server");
         return writeReply(articleId, article, type);
     }
 
