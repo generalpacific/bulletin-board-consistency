@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.content.RegisterRet;
+import edu.umn.bulletinboard.common.exception.IllegalIPException;
+import edu.umn.bulletinboard.common.locks.ServerLock;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
+import edu.umn.bulletinboard.common.util.LogUtil;
 
 /**
  * @author abhijeet
@@ -22,7 +26,7 @@ public class Coordinator {
 
     //This is an assumption that number of articles cannot be more than
     //Max value of integer in Java
-	int counter;
+	int counter, serverIdCounter;
     int readQ, writeQ;
     List<ServerInfo> servers = new ArrayList<ServerInfo>();
 
@@ -39,7 +43,6 @@ public class Coordinator {
         //for quorum consistency only
 
         //get all the data from any random readQ servers.
-
         //see which is the max value, get all the values from that server and return them
 
 		return null;
@@ -99,7 +102,7 @@ public class Coordinator {
 
         // this should be synchronized as a lot of Servers will simultaneously
         // call this method.
-        synchronized (this) {
+        synchronized (ServerLock.getID) {
             return ++counter;
         }
 	}
@@ -111,8 +114,21 @@ public class Coordinator {
      * @return server id
      * @throws RemoteException
      */
-    public int register(String ip, int port) throws RemoteException {
-        return 0;
+    public RegisterRet register(String ip, int port) throws RemoteException {
+
+        RegisterRet ret = null;
+
+        synchronized (ServerLock.register) {
+            ++serverIdCounter;
+            try {
+                ret = new RegisterRet(serverIdCounter, servers);
+                servers.add(serverIdCounter, new ServerInfo(ip, port));
+            } catch (IllegalIPException e) {
+                throw new RemoteException(e.getMessage());
+            }
+        }
+
+        return ret;
     }
 
     public void sync(List<Article> articles) throws RemoteException {

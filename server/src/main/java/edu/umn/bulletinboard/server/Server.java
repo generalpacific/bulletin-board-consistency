@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.umn.bulletinboard.common.constants.RMIConstants;
+import edu.umn.bulletinboard.common.content.RegisterRet;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.LogUtil;
@@ -83,7 +84,9 @@ public class Server {
 		}
 		
 		try {
-			serverId = coordinatorServerRMIObjectHandle.register(serverIp, serverRMIPort);
+            RegisterRet ret = coordinatorServerRMIObjectHandle.register(serverIp, serverRMIPort);
+			serverId = ret.getId();
+            servers = new ArrayList<ServerInfo>(ret.getServers());
 		} catch (RemoteException e1) {
 			LogUtil.log(method, "Cannot register to the coordinating server " + e1.getMessage() + ". Exiting.");
 			System.exit(1);

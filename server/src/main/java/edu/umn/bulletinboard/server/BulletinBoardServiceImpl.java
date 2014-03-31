@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.content.RegisterRet;
 import edu.umn.bulletinboard.common.rmi.BulletinBoardService;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
@@ -76,7 +77,7 @@ public class BulletinBoardServiceImpl implements BulletinBoardService{
     }
 
     @Override
-    public int register(String ip, int port) throws RemoteException {
+    public RegisterRet register(String ip, int port) throws RemoteException {
         return coordServerImpl.register(ip, port);
     }
 

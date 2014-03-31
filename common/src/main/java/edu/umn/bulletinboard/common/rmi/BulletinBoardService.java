@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import edu.umn.bulletinboard.common.content.Article;
+import edu.umn.bulletinboard.common.content.RegisterRet;
 import edu.umn.bulletinboard.common.server.ServerInfo;
 import edu.umn.bulletinboard.common.util.ConsistencyType;
 
@@ -123,7 +124,7 @@ public interface BulletinBoardService extends Remote {
 	 * Registers the current server to the coordinating server.
 	 * Returns the server id for the server.  
 	 */
-	public int register(String ip, int port) throws RemoteException;
+	public RegisterRet register(String ip, int port) throws RemoteException;
 	
 	/**
 	 * Returns the list of registered servers.
