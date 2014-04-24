@@ -20,13 +20,12 @@ Steps to Run:
   1. Extract the tar ball given, let this dir be PROJ_HOME:
   -- Following commands will run client and sever:
     Client:
-	  java -cp ./client-1.0-SNAPSHOT.jar:./server-1.0-SNAPSHOT.jar:./common-1.0-SNAPSHOT.jar edu.umn.bulletinboard.client.Client &lt; ryw &gt;
+	  java -cp ./client-1.0-SNAPSHOT.jar:./server-1.0-SNAPSHOT.jar:./common-1.0-SNAPSHOT.jar edu.umn.bulletinboard.client.Client &lt;ryw&gt;
 
 	  `ryw` argument is optional and needs to be given only if Server is using Read Your Write Consistency.
 
 	Server:
-	  java -cp ./client-1.0-SNAPSHOT.jar:./server-1.0-SNAPSHOT.jar:./common-1.0-SNAPSHOT.jar edu.umn.bulletinboard.server.Server <server_ip>
-	  <server_port> <properties_file_name>
+	  java -cp ./client-1.0-SNAPSHOT.jar:./server-1.0-SNAPSHOT.jar:./common-1.0-SNAPSHOT.jar edu.umn.bulletinboard.server.Server &lt;server_ip &gt; &lt;server_port&gt; &lt;properties_file_name&gt;
 
 	  server_ip: Host name of the RMI server
 	  server_port: Port on which RMI server should run
