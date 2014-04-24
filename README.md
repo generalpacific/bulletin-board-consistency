@@ -1,8 +1,10 @@
 This is a simple Bulletin Board System in which client can post, reply and read articles stored in the BB. The BB is maintained by a group of replicated servers that offer Sequential consistency, Quorum consistency and Read-your-Write consistency.
 
 Authors:
-Abhijeet Gaikwad (Student id: 4934921)
-Prashant Chaudhary (Student id: 4922579)
+
+Abhijeet Gaikwad 
+
+Prashant Chaudhary 
 
 Building:
 This project was built using maven, hopefully you will not have to build as we developed
@@ -15,10 +17,10 @@ help on any of the cs machines in the lab:
      PROJ_HOME/dist/target/bulletinboard-1.0-SNAPSHOT.tar.gz
 
 Steps to Run:
-1. Extract the tar ball given, let this dir be PROJ_HOME:
+  1. Extract the tar ball given, let this dir be PROJ_HOME:
   -- Following commands will run client and sever:
     Client:
-	  java -cp ./client-1.0-SNAPSHOT.jar:./server-1.0-SNAPSHOT.jar:./common-1.0-SNAPSHOT.jar edu.umn.bulletinboard.client.Client <ryw>
+	  java -cp ./client-1.0-SNAPSHOT.jar:./server-1.0-SNAPSHOT.jar:./common-1.0-SNAPSHOT.jar edu.umn.bulletinboard.client.Client \<ryw\>
 
 	  `ryw` argument is optional and needs to be given only if Server is using Read Your Write Consistency.
 
@@ -37,8 +39,8 @@ Steps to Run:
 
 		If coordinatingServerIp and coordinatingServerRMIPort are not present in the conf file, the server is considered as coordinator.
 
-2. Once a server is started, there is nothing required from user unless he/she wants to
+  2. Once a server is started, there is nothing required from user unless he/she wants to
    shut it down. Logs can be monitored on Server which list the activities made by
    client on server and/or coordinator console.
 
-3. For a list of commands that can be used on Command line client, please see design.txt.
+  3. For a list of commands that can be used on Command line client, please see design.txt.
